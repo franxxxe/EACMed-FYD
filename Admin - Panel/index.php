@@ -630,10 +630,6 @@
                     <br>
 
 
-
-
-
-
                     <h4>Specialization</h4>
                     <div class='InputFieldForm'>
                       <div class='InputFieldFormChild1'>
@@ -661,11 +657,6 @@
                       </div>
                     </div>
 
-
-
-
-
-                    
 
                     <h4>Sub Specialization</h4>
                     <div class='InputFieldForm'>
@@ -773,9 +764,6 @@
                     </div>
 
 
-
-
-
                     <br>
                     <h4>Teleconsultaion</h4>
                     <div class="InputFieldForm">
@@ -785,9 +773,7 @@
                     <br>
 
 
-
                     <br>
-
                     <h4>HMO Accreditation</h4>
                     <div class='InputFieldForm'>
                       <div class='InputFieldFormChild1'>
@@ -817,36 +803,56 @@
                     </div>
 
 
+                    <br>
+                    <h4>Remarks</h4>
+                    <div class="InputFieldForm">
+                      <i class="InputFieldForm-i">Remarks:</i>
+                      <textarea name="" id="DoctorsRemarks" class="DoctorRemarks" placeholder="Input Notes"></textarea>
+                      <!-- <input type="text" id="DoctorsTeleConsult" placeholder="Teleconsultaion" class="CT1"> -->
+                    </div>
+                    <br>
 
-                    <!-- <br>
 
-                    <h4>HMO Accreditation</h4>
+                    <br>
+                    <hr>
+                    <br>
+                    <h4>Secretary</h4>
                     <div class='InputFieldForm'>
-                      <div class='InputFieldFormChild1'>
-                        <i class='InputFieldForm-i'>HMO Accreditation:</i>
-                        <button class='Btn_1'>Add HMO Accreditation</button>
-                      </div>
-                      <div class='searchContainer-Parent'>
-                        <div class='inputFlex'>
-                          <input type='text' onkeyup='editSearch(4)' id='editSearch4' placeholder='Search HMO Accreditation'>
-                          <div class='inputFlexIcon' onclick='closeSearch(4)'><i class='fa-solid fa-xmark'></i></div>
+                      <i class='InputFieldForm-i'>Secretary:</i>
+                      <div class='InputFieldForm-div'>
+                        <div class='InputFieldForm-schedule'>
+                          <p>Select Day</p>
+                          <select id='day-select' name='day-select'>
+                            <option value='Monday'>Monday</option>
+                            <option value='Tuesday'>Tuesday</option>
+                            <option value='Wednesday'>Wednesday</option>
+                            <option value='Thursday'>Thursday</option>
+                            <option value='Friday'>Friday</option>
+                            <option value='Saturday'>Saturday</option>
+                            <option value='Sunday'>Sunday</option>
+                          </select>
                         </div>
-                        
-                        <div class='hiddenContainer'>
-                          <ul>
-                            <li>Alfelor</li>
-                            <li>Alfelor</li>
-                            <li>Alfelor</li>
-                            <li>Alfelor</li>
-                            <li>Alfelor</li>
-                          </ul>
+                        <div class='InputFieldForm-divFlexColumn'>
+                          <div class='InputFieldForm-schedule'>
+                            <p>Time Start</p>
+                            <input type='time' id='pick-timeIn' name='pick-time'>
+                          </div>
+                          <div class='InputFieldForm-schedule'>
+                            <p>Time End</p>
+                            <input type='time' id='pick-timeOut' name='pick-time'>
+                          </div>
+                          <div class='InputFieldForm-schedule'>
+                            <button class='Btn_1' onclick="AddSchedule()">Add</button>
+                          </div>
                         </div>
                       </div>
                     </div>
                     <div class='InputFieldForm'>
                       <i class='InputFieldForm-i'></i>
-                      <div class='InformationField'></div>
-                    </div> -->
+                      <div class='InformationField InformationFieldAddSchedule'>
+                        <!-- Function -->
+                      </div>
+                    </div>
 
 
                   </div>

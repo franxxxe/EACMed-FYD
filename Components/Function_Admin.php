@@ -59,6 +59,7 @@ if (isset($_POST["InsertDoctor"])) {
   $Room = $_POST["Room"];
   $HMOAccreditation = $_POST["HMOAccreditation"];
   $TeleConsultation = $_POST["TeleConsultation"];
+  $Remarks = $_POST["Remarks"];
 
   $PrimarySecretary = $_POST["PrimarySecretary"];
   $PrimaryFirstNumber = $_POST["PrimaryFirstNumber"];
@@ -163,6 +164,9 @@ if (isset($_POST["InsertDoctor"])) {
 
   $InsertConsultation = $connPDO->prepare("INSERT INTO `doctor_teleconsult`(teleconsult_doctor_id, teleconsult_link) VALUES(?,?)");
   $InsertConsultation->execute([$doctorAccountId, $TeleConsultation]);
+
+  $InsertRemarks = $connPDO->prepare("INSERT INTO `doctor_notes`(notes_doctor_id, doctor_notes_details) VALUES(?,?)");
+  $InsertRemarks->execute([$doctorAccountId, $Remarks]);
 
   echo "Doctor have been successfully inserted!";
 

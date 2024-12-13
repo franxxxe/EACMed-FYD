@@ -387,6 +387,7 @@ function InsertNewDoctor(InsertDoctor) {
     Room: roomArr,
     HMOAccreditation: hmoArr,
     TeleConsultation: $("#DoctorsTeleConsult").val(),
+    Remarks: $("#DoctorsRemarks").val(),
 
     Category: $("#DoctorCategory").val(),
     PrimarySecretary: $("#DoctorsFirstName").val(),
@@ -422,7 +423,15 @@ function InsertNewDoctor(InsertDoctor) {
   
   $("#hiddenInformationFieldIDSpecs").html("");
   $("#hiddenInformationFieldIDSpecs2").html("");
-  $("#InformationFieldAddSchedule").html("");
+
+  $("#hiddenInformationFieldIDSubSpecs").html("");
+  $("#day-select").html("");
+  $("#pick-timeIn").html("");
+  $("#pick-timeOut").html("");
+  $("#DoctorsRemarks").html("");
+
+
+  $(".InformationFieldAddSchedule").html("");
   $("#hiddenInformationFieldIDRoom").html("");
   $("#hiddenInformationFieldIDHMO").html("");
 
