@@ -908,7 +908,7 @@ if (isset($_POST["searchId"])) {
       while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {
         if($SearchType == "Edit"){
           echo" 
-            <li onclick='selectThis(`Specs`,".$SpecsRow['specialization_id'].",`InsertEditSpecs`)'><i class='fa-solid fa-plus'></i> <p>".$SpecsRow['specialization_id']."</p></li>
+            <li onclick='selectThis(`Specs`,".$SpecsRow['specialization_id'].",`InsertEditSpecs`)'><i class='fa-solid fa-plus'></i> <p>".$SpecsRow['specialization_name']."</p></li>
           ";
         }
         else{
