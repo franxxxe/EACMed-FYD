@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 13, 2024 at 05:52 AM
+-- Generation Time: Dec 14, 2024 at 05:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,11 +55,42 @@ INSERT INTO `admin_accounts` (`admin_id`, `admin_username`, `admin_password`, `a
 
 CREATE TABLE `admin_activity_logs` (
   `admin_activity_logs_id` int(11) NOT NULL,
-  `activity_logs_admin_id` int(11) NOT NULL,
-  `edited_date` varchar(255) NOT NULL,
-  `edited_time` varchar(255) NOT NULL,
-  `edit_details` varchar(1000) NOT NULL
+  `activity_logs_admin_id` varchar(255) NOT NULL,
+  `event_type` varchar(255) NOT NULL,
+  `edit_details` varchar(1000) NOT NULL,
+  `time_stamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin_activity_logs`
+--
+
+INSERT INTO `admin_activity_logs` (`admin_activity_logs_id`, `activity_logs_admin_id`, `event_type`, `edit_details`, `time_stamp`) VALUES
+(1, '20241213-781133', '', 'd', '2024-12-13 09:37:59'),
+(2, '1', 'New Account', 'Create Account of Dr. marce dee reyas', '2024-12-13 10:06:34'),
+(3, '1', 'New Account', 'Create Account of Dr. carl john mendoza', '2024-12-13 10:16:25'),
+(4, '1', 'New Account', 'Create Account of Dr. fsadf sdfas sadf', '2024-12-13 10:25:53'),
+(5, '1', 'New Account', 'Create Account of Dr. asdf sadf sdfa', '2024-12-13 10:31:19'),
+(6, '1', 'New Account', 'Create Account of Dr. asdf sdf asdf', '2024-12-13 10:38:02'),
+(7, '1', 'New Account', 'Create Account of Dr. asdf sdf df', '2024-12-13 10:39:54'),
+(8, '1', 'New Account', 'Create Account of Dr. ASDF ASF SADF', '2024-12-13 10:56:00'),
+(9, '1', 'Remove Account', 'Remove Account of Dr.   ', '2024-12-14 09:30:23'),
+(10, '1', 'Remove Account', 'Remove Account of Dr.   ', '2024-12-14 09:31:43'),
+(11, '1', 'Remove Account', 'Remove Account of Dr.   ', '2024-12-14 09:31:51'),
+(12, '1', 'Remove Account', 'Remove Account of Dr.   ', '2024-12-14 09:32:37'),
+(13, '1', 'Remove Account', 'Remove Account of Dr. asdf asdfasdf asdfasdfasdf', '2024-12-14 09:42:04'),
+(14, '1', 'Remove Account', 'Remove Account of Dr. VCXVDS sdfdf dfsdfsd', '2024-12-14 09:48:07'),
+(15, '1', 'Remove Account', 'Remove Account of Dr. fsdfdf dfsdfsd sdfsdfsdf', '2024-12-14 09:50:59'),
+(16, '1', 'Remove Account', 'Remove Account of Dr. asdfewrwfsgvbc sadfsdfs asdf', '2024-12-14 09:52:12'),
+(17, '1', 'Remove Account', 'Remove Account of Dr. asdff sdfdf sdff', '2024-12-14 09:52:41'),
+(18, '1', 'Remove Account', 'Remove Account of Dr. zxc vcxv cxv', '2024-12-14 09:54:22'),
+(19, '1', 'Restore Account', 'Remove Account of Dr. ASDF ASF SADF', '2024-12-14 09:56:55'),
+(20, '1', 'Remove Account', 'Remove Account of Dr. ASDF ASF SADF', '2024-12-14 10:52:37'),
+(21, '1', 'Remove Account', 'Remove Account of Dr. sadf asdf asdf', '2024-12-14 10:54:20'),
+(22, '1', 'Update Account', 'Update Account of Dr. asdfsdffdsgb gsdgsdg sdff', '2024-12-14 11:35:04'),
+(23, '1', 'Restore Account', 'Restore Account of Dr. ASDF ASF SADF', '2024-12-14 11:36:11'),
+(24, '1', 'Update Account', 'Update Account of Dr. ASDF ASF SADF', '2024-12-14 11:36:41'),
+(25, '1', 'Update Account', 'Update Account of Dr. ASDF ASF ', '2024-12-14 11:39:07');
 
 -- --------------------------------------------------------
 
@@ -96,9 +127,26 @@ INSERT INTO `doctor` (`doctor_id`, `doctor_account_id`, `doctor_name`, `doctor_f
 (8, '20241209-163469', 'Danica R. Dela Cruz', 'Danica', 'Ricardo', 'Dela Cruz', 'Female', 'Regular Consultant', 'ACTIVE', 'VISIBLE', 'Doctor2.png'),
 (9, '20241209-163410', 'Oliver H. Dadole', 'Oliver', 'Howrad', 'Dadole', 'Male', 'Visiting Consultant', 'ACTIVE', 'VISIBLE', 'Doctor1.png'),
 (10, '20241209-163411', 'Nathan R. Lee', 'Nathan', 'Roberto', 'Lee', 'Male', 'Visiting Consultant', 'ACTIVE', 'VISIBLE', 'Doctor1.png'),
-(83, '20241212-336265', '', 'France', 'Joshua', 'alfelor', 'Male', 'Regular Consultant', 'INACTIVE', 'VISIBLE', 'Doctor1.png'),
+(83, '20241212-336265', '', 'France', 'Joshua', 'alfelor', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
 (84, '20241212-112356', '', 'Joshua', 'f', 'alfelor', 'Male', 'Visiting Consultant', 'INACTIVE', 'VISIBLE', 'Doctor1.png'),
-(85, '20241212-531091', '', 'marc', 'lee', 'reyes', 'Male', 'Regular Consultant', 'INACTIVE', 'VISIBLE', 'Doctor1.png');
+(85, '20241212-531091', '', 'marc', 'lee', 'reyes', 'Male', 'Regular Consultant', 'INACTIVE', 'VISIBLE', 'Doctor1.png'),
+(86, '20241213-803003', '', 'd1', 'd1', 'd1', 'Male', 'Regular Consultant', 'INACTIVE', 'VISIBLE', 'Doctor1.png'),
+(87, '20241213-443100', '', 'sadf', 'asdf', 'asdf', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(88, '20241213-281442', '', 'asdfewrwfsgvbc', 'sadfsdfs', 'asdf', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(89, '20241213-202795', '', 'asdfsdffdsgb', 'gsdgsdg', 'wala', 'Male', 'Regular Consultant', 'INACTIVE', 'VISIBLE', 'Doctor1.png'),
+(90, '20241213-409201', '', 'zxc', 'vcxv', 'cxv', 'Female', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor2.png'),
+(91, '20241213-005198', '', 'VCXVDS', 'sdfdf', 'dfsdfsd', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(92, '20241213-685947', '', 'asdff', 'sdfdf', 'sdff', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(93, '20241213-745088', '', 'fsdfdf', 'dfsdfsd', 'sdfsdfsdf', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(94, '20241213-697001', '', 'asdf', 'asdfasdf', 'asdfasdfasdf', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(95, '20241213-781133', '', 'sdfx', 'cvx', 'xcv', 'Female', 'Waiting Consultant', 'INACTIVE', 'HIDDEN', 'Doctor2.png'),
+(96, '20241213-013246', '', 'marce', 'dee', 'reyas', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(97, '20241213-420079', '', 'carl', 'john', 'mendoza', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(98, '20241213-396860', '', 'fsadf', 'sdfas', 'sadf', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(99, '20241213-722798', '', 'asdf', 'sadf', 'sdfa', 'Male', 'Regular Consultant', 'INACTIVE', 'HIDDEN', 'Doctor1.png'),
+(100, '20241213-912737', '', 'asdf', 'sdf', 'asdf', 'Female', 'Waiting Consultant', 'INACTIVE', 'HIDDEN', 'Doctor2.png'),
+(101, '20241213-480590', '', 'asdf', 'sdf', 'df', 'Female', 'Waiting Consultant', 'INACTIVE', 'HIDDEN', 'Doctor2.png'),
+(102, '20241213-745417', '', 'france Joshua', 'bayo', 'alfelor', 'Male', 'Visiting Consultant', 'INACTIVE', 'VISIBLE', 'Doctor1.png');
 
 -- --------------------------------------------------------
 
@@ -195,7 +243,29 @@ INSERT INTO `doctor_hmo` (`doctor_hmo_id`, `hmo_doctor_id`, `hmo_id_2`, `doctor_
 (53, '20241212-336265', 24, 'Health Maintenance, Inc.'),
 (54, '20241212-112356', 7, 'Medasia Philippines Inc.'),
 (55, '20241212-112356', 15, 'Carewell Health Systems, Inc.'),
-(56, '20241212-531091', 14, 'Advanced Medical Access Philippines, Inc.');
+(56, '20241212-531091', 14, 'Advanced Medical Access Philippines, Inc.'),
+(57, '20241213-803003', 1, 'Healthway Medi-Access'),
+(58, '20241213-281442', 17, 'Etiqa Life And General Assurance Philippines, Inc.'),
+(59, '20241213-202795', 3, 'Insular Life Assurance Co., Ltd.'),
+(60, '20241213-409201', 3, 'Insular Life Assurance Co., Ltd.'),
+(61, '20241213-005198', 7, 'Medasia Philippines Inc.'),
+(62, '20241213-685947', 3, 'Insular Life Assurance Co., Ltd.'),
+(63, '20241213-745088', 22, 'Generali Life Assurance Philippines Inc.'),
+(64, '20241213-697001', 8, 'Medicard Philippines Inc.'),
+(65, '20241213-697001', 10, 'MedoCare Health Systems, Inc.'),
+(66, '20241213-781133', 7, 'Medasia Philippines Inc.'),
+(67, '20241213-013246', 13, 'Allianz PNB Life Insurance Inc'),
+(68, '20241213-420079', 2, 'Intellicare'),
+(69, '20241213-420079', 3, 'Insular Life Assurance Co., Ltd.'),
+(70, '20241213-420079', 4, 'KAISER International Healthgroup, Inc.'),
+(71, '20241213-420079', 18, 'Avega Managed Care, Inc.'),
+(72, '20241213-420079', 22, 'Generali Life Assurance Philippines Inc.'),
+(73, '20241213-396860', 7, 'Medasia Philippines Inc.'),
+(74, '20241213-722798', 13, 'Allianz PNB Life Insurance Inc'),
+(75, '20241213-912737', 1, 'Healthway Medi-Access'),
+(76, '20241213-480590', 8, 'Medicard Philippines Inc.'),
+(77, '20241213-745417', 2, 'Intellicare'),
+(78, '20241213-745417', 3, 'Insular Life Assurance Co., Ltd.');
 
 -- --------------------------------------------------------
 
@@ -223,7 +293,24 @@ INSERT INTO `doctor_notes` (`doctor_notes_id`, `notes_doctor_id`, `doctor_notes_
 (7, '20241209-163467', '* First come first serve/walk-in.'),
 (8, '20241209-163468', '6 patients per day.'),
 (9, '20241209-163469', '2 to 5 patients per day'),
-(10, '20241209-163410', 'Strictly BY APPOINTMENT. You can email for more information at biancalatorres@eacmed.org.ph');
+(10, '20241209-163410', 'Strictly BY APPOINTMENT. You can email for more information at biancalatorres@eacmed.org.ph'),
+(11, '20241213-803003', 'd1'),
+(12, '20241213-443100', ''),
+(13, '20241213-281442', ''),
+(14, '20241213-202795', ''),
+(15, '20241213-409201', ''),
+(16, '20241213-005198', ''),
+(17, '20241213-685947', ''),
+(18, '20241213-745088', 'sdafasdf'),
+(19, '20241213-697001', 'asdf'),
+(20, '20241213-781133', 'd'),
+(21, '20241213-013246', 'dsdfa'),
+(22, '20241213-420079', 'note lang'),
+(23, '20241213-396860', 'd'),
+(24, '20241213-722798', 'd'),
+(25, '20241213-912737', 'd'),
+(26, '20241213-480590', 'd'),
+(27, '20241213-745417', 'D');
 
 -- --------------------------------------------------------
 
@@ -258,7 +345,25 @@ INSERT INTO `doctor_room` (`doctor_room_id`, `room_doctor_id`, `doctor_room_floo
 (60, '20241212-336265', '', '2nd Floor - Room 2221'),
 (61, '20241212-336265', '', '2nd Floor - Room 2251'),
 (62, '20241212-112356', '', '2nd Floor - Room 2221'),
-(63, '20241212-531091', '', '3rd Floor - Room 3306');
+(63, '20241212-531091', '', '3rd Floor - Room 3306'),
+(64, '20241213-803003', '', '2nd Floor - Room 2408'),
+(65, '20241213-281442', '', '2nd Floor - Room 2408'),
+(66, '20241213-202795', '', '3rd Floor - Room 3306'),
+(67, '20241213-409201', '', '2nd Floor - Room 2221'),
+(68, '20241213-005198', '', '2nd Floor - Room 2251'),
+(69, '20241213-685947', '', '2nd Floor - Room 2408'),
+(70, '20241213-745088', '', '2nd Floor - Room 2408'),
+(71, '20241213-697001', '', '3rd Floor - Room 3306'),
+(72, '20241213-697001', '', '2nd Floor - Room 2221'),
+(73, '20241213-781133', '', '2nd Floor - Room 2221'),
+(74, '20241213-013246', '', '2nd Floor - Room 2221'),
+(75, '20241213-420079', '', '2nd Floor - Room 2408'),
+(76, '20241213-420079', '', '2nd Floor - Room 2251'),
+(77, '20241213-396860', '', '3rd Floor - Room 3306'),
+(78, '20241213-722798', '', '2nd Floor - Room 2221'),
+(79, '20241213-912737', '', '2nd Floor - Room 2408'),
+(80, '20241213-480590', '', '2nd Floor - Room 2221'),
+(81, '20241213-745417', '', '2nd Floor - Room 2408');
 
 -- --------------------------------------------------------
 
@@ -327,7 +432,27 @@ INSERT INTO `doctor_schedule` (`doctor_schedule_id`, `schedule_doctor_id`, `doct
 (49, '20241212-336265', 'Tuesday', '2:37AM - 11:37PM'),
 (50, '20241212-336265', 'Wednesday', '2:37AM - 11:40PM'),
 (51, '20241212-112356', 'Tuesday', '2:34AM - 2:34PM'),
-(52, '20241212-531091', 'Tuesday', '6:07AM - 5:07PM');
+(52, '20241212-531091', 'Tuesday', '6:07AM - 5:07PM'),
+(53, '20241213-803003', 'Tuesday', '2:06AM - 2:06PM'),
+(54, '20241213-905145', 'Tuesday', '4:42AM - 4:42PM'),
+(55, '20241213-866807', 'Tuesday', '4:54AM - 4:54PM'),
+(56, '20241213-571014', 'Wednesday', '4:57AM - 4:57PM'),
+(57, '20241213-281442', 'Wednesday', '5:02AM - 5:02PM'),
+(58, '20241213-202795', 'Monday', '5:04AM - 5:04PM'),
+(59, '20241213-409201', 'Thursday', '5:07AM - 5:07PM'),
+(60, '20241213-005198', 'Friday', '5:11AM - 5:11PM'),
+(61, '20241213-685947', 'Monday', '5:18AM - 5:18PM'),
+(62, '20241213-745088', 'Wednesday', '5:20AM - 5:20PM'),
+(63, '20241213-697001', 'Wednesday', '5:23AM - 5:23PM'),
+(64, '20241213-781133', 'Friday', '5:37AM - 5:37PM'),
+(65, '20241213-013246', 'Monday', '8:06AM - 6:06PM'),
+(66, '20241213-420079', 'Wednesday', '6:15AM - 6:15PM'),
+(67, '20241213-420079', 'Friday', '6:15AM - 6:15PM'),
+(68, '20241213-396860', 'Wednesday', '6:25AM - 6:25PM'),
+(69, '20241213-722798', 'Monday', '6:30AM - 6:30PM'),
+(70, '20241213-912737', 'Wednesday', '6:37AM - 6:37PM'),
+(71, '20241213-480590', 'Thursday', '6:39AM - 6:39PM'),
+(72, '20241213-745417', 'Tuesday', '6:53AM - 6:53PM');
 
 -- --------------------------------------------------------
 
@@ -362,7 +487,19 @@ INSERT INTO `doctor_secretary` (`doctor_secretary_id`, `secretary_doctor_id`, `d
 (9, '20241209-163467', 'Russel Art S. Espiña', 'Male', 'SMART', '0933 210 9876', '', ''),
 (10, '20241209-163468', 'Francine J. Alfelor', 'Female', 'SMART', '0939 876 5432', 'DITO', '0917 789 0123'),
 (11, '20241209-163469', 'Lea Anne C. Toledo', 'Female', 'GLOBE', '0935 901 2345', '', ''),
-(12, '20241209-163410', 'Bianca Louise A. Torres', 'Female', 'GLOBE', '0935 345 6789', '', '');
+(12, '20241209-163410', 'Bianca Louise A. Torres', 'Female', 'GLOBE', '0935 345 6789', '', ''),
+(13, '20241213-685947', 'd', '', '324234', 'Globe', '344234', 'Smart'),
+(14, '20241213-745088', 'sdfsdf', '', 'Smart', '324234', 'DITO', '234234'),
+(15, '20241213-697001', 'france', '', 'Smart', '012387126313', 'DITO', '17236876123'),
+(16, '20241213-697001', 'Joshua', '', 'Smart', '234234', 'Cherry Prepaid', '2342344'),
+(17, '20241213-781133', 'd', '', 'Globe', '324', 'Globe', '34'),
+(18, '20241213-013246', 'dsdfa', '', 'Globe', '32423', 'DITO', '2344'),
+(19, '20241213-420079', 'carl', '', 'Smart', '9283479234', 'Sun', '2387462344'),
+(20, '20241213-396860', 'd', '', 'Globe', '234234', 'Globe', '234234'),
+(21, '20241213-722798', 'ad', '', 'Smart', '234234', 'Smart', '3434'),
+(22, '20241213-912737', 'sdff', '', 'Smart', '2134', 'Globe', '123'),
+(23, '20241213-480590', 'asdf', '', 'Smart', '234234', 'Smart', '234234'),
+(24, '20241213-745417', 'd', '', 'Smart', '234', 'Smart', '234');
 
 -- --------------------------------------------------------
 
@@ -420,7 +557,30 @@ INSERT INTO `doctor_specialization` (`doctor_specialization_id`, `specialization
 (45, '20241212-336265', 8, 'Family and Community Medicine'),
 (46, '20241212-336265', 10, 'Radiology'),
 (47, '20241212-112356', 4, 'Surgery'),
-(48, '20241212-531091', 4, 'Surgery');
+(48, '20241212-531091', 4, 'Surgery'),
+(49, '20241213-803003', 1, 'Internal Medicine'),
+(50, '20241213-905145', 2, 'Orthopedics'),
+(51, '20241213-866807', 8, 'Family and Community Medicine'),
+(52, '20241213-571014', 1, 'Internal Medicine'),
+(53, '20241213-281442', 2, 'Orthopedics'),
+(54, '20241213-202795', 2, 'Orthopedics'),
+(55, '20241213-409201', 3, 'Pediatrics'),
+(56, '20241213-005198', 2, 'Orthopedics'),
+(57, '20241213-685947', 1, 'Internal Medicine'),
+(58, '20241213-745088', 1, 'Internal Medicine'),
+(59, '20241213-697001', 2, 'Orthopedics'),
+(60, '20241213-781133', 3, 'Pediatrics'),
+(61, '20241213-013246', 3, 'Pediatrics'),
+(62, '20241213-420079', 4, 'Surgery'),
+(63, '20241213-420079', 8, 'Family and Community Medicine'),
+(64, '20241213-420079', 10, 'Radiology'),
+(65, '20241213-396860', 8, 'Family and Community Medicine'),
+(66, '20241213-722798', 2, 'Orthopedics'),
+(67, '20241213-912737', 1, 'Internal Medicine'),
+(68, '20241213-480590', 8, 'Family and Community Medicine'),
+(69, '20241213-745417', 1, 'Internal Medicine'),
+(70, 'France', 1, 'Updated'),
+(71, 'France', 1, 'Updated');
 
 -- --------------------------------------------------------
 
@@ -496,7 +656,30 @@ INSERT INTO `doctor_sub_specialization` (`doctor_sub_specialization_id`, `sub_sp
 (54, '20241212-336265', 8, 'Knee Arthoscopy'),
 (55, '20241212-336265', 13, 'General Pediatrics'),
 (56, '20241212-112356', 7, 'Hand Surgery'),
-(57, '20241212-531091', 7, 'Hand Surgery');
+(57, '20241212-531091', 7, 'Hand Surgery'),
+(58, '20241213-803003', 5, 'Rheumatology'),
+(59, '20241213-905145', 2, 'Dermatology'),
+(60, '20241213-866807', 3, 'Endocrinology'),
+(61, '20241213-571014', 3, 'Endocrinology'),
+(62, '20241213-281442', 7, 'Hand Surgery'),
+(63, '20241213-202795', 5, 'Rheumatology'),
+(64, '20241213-409201', 7, 'Hand Surgery'),
+(65, '20241213-005198', 7, 'Hand Surgery'),
+(66, '20241213-685947', 3, 'Endocrinology'),
+(67, '20241213-745088', 2, 'Dermatology'),
+(68, '20241213-697001', 3, 'Endocrinology'),
+(69, '20241213-697001', 6, 'Arthroplasty'),
+(70, '20241213-697001', 8, 'Knee Arthoscopy'),
+(71, '20241213-781133', 8, 'Knee Arthoscopy'),
+(72, '20241213-013246', 7, 'Hand Surgery'),
+(73, '20241213-420079', 3, 'Endocrinology'),
+(74, '20241213-420079', 7, 'Hand Surgery'),
+(75, '20241213-420079', 8, 'Knee Arthoscopy'),
+(76, '20241213-396860', 3, 'Endocrinology'),
+(77, '20241213-722798', 2, 'Dermatology'),
+(78, '20241213-912737', 2, 'Dermatology'),
+(79, '20241213-480590', 13, 'General Pediatrics'),
+(80, '20241213-745417', 1, 'Cardiology');
 
 -- --------------------------------------------------------
 
@@ -520,7 +703,24 @@ INSERT INTO `doctor_teleconsult` (`doctor_teleconsult_id`, `teleconsult_doctor_i
 (9, '20241212-336265', 'teleFacebook.com'),
 (12, '20241209-163463', NULL),
 (13, '20241212-112356', 'facebook.com'),
-(14, '20241212-531091', '');
+(14, '20241212-531091', ''),
+(15, '20241213-803003', ''),
+(16, '20241213-443100', ''),
+(17, '20241213-281442', ''),
+(18, '20241213-202795', ''),
+(19, '20241213-409201', ''),
+(20, '20241213-005198', ''),
+(21, '20241213-685947', ''),
+(22, '20241213-745088', ''),
+(23, '20241213-697001', 'asdf'),
+(24, '20241213-781133', '2'),
+(25, '20241213-013246', 'asdf'),
+(26, '20241213-420079', 'htt'),
+(27, '20241213-396860', ''),
+(28, '20241213-722798', 'sa'),
+(29, '20241213-912737', 'ds'),
+(30, '20241213-480590', 'd'),
+(31, '20241213-745417', 'D');
 
 -- --------------------------------------------------------
 
@@ -797,13 +997,13 @@ ALTER TABLE `admin_accounts`
 -- AUTO_INCREMENT for table `admin_activity_logs`
 --
 ALTER TABLE `admin_activity_logs`
-  MODIFY `admin_activity_logs_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `admin_activity_logs_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `doctor`
 --
 ALTER TABLE `doctor`
-  MODIFY `doctor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `doctor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `doctor_archive`
@@ -821,49 +1021,49 @@ ALTER TABLE `doctor_category`
 -- AUTO_INCREMENT for table `doctor_hmo`
 --
 ALTER TABLE `doctor_hmo`
-  MODIFY `doctor_hmo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `doctor_hmo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `doctor_notes`
 --
 ALTER TABLE `doctor_notes`
-  MODIFY `doctor_notes_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `doctor_notes_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `doctor_room`
 --
 ALTER TABLE `doctor_room`
-  MODIFY `doctor_room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `doctor_room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `doctor_schedule`
 --
 ALTER TABLE `doctor_schedule`
-  MODIFY `doctor_schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `doctor_schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `doctor_secretary`
 --
 ALTER TABLE `doctor_secretary`
-  MODIFY `doctor_secretary_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `doctor_secretary_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `doctor_specialization`
 --
 ALTER TABLE `doctor_specialization`
-  MODIFY `doctor_specialization_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `doctor_specialization_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `doctor_sub_specialization`
 --
 ALTER TABLE `doctor_sub_specialization`
-  MODIFY `doctor_sub_specialization_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `doctor_sub_specialization_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `doctor_teleconsult`
 --
 ALTER TABLE `doctor_teleconsult`
-  MODIFY `doctor_teleconsult_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `doctor_teleconsult_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `hmo`

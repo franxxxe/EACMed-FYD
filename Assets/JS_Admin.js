@@ -258,7 +258,9 @@ function EditDoctor(ViewEdit_ID) {
   $(".Modal-Sidebar").css("display", "flex");
   $(".Modal-EditDoctor").css("display", "flex");
   $(".Modal-EditDoctor").siblings().css("display", "none");
-  
+
+  selectedDoctorID = ViewEdit_ID;
+
   var data = {
     ViewEdit_ID: ViewEdit_ID,
   };
@@ -534,38 +536,61 @@ function Yes_ResetPasswordAdmin(Yes_ResetPasswordAdmin_ID) {
 
 
 
-
-
-
-
-
-
-
-
-
 // ADD DOCTOR - SEARCH
-function editSearch(searchId) {
-  const searchElement = $("#editSearch" + searchId);
-  if (searchElement.val().length === 0) {
-    searchElement.parent().siblings().css("display", "none");
-  } else {
-    searchElement.parent().siblings().css("display", "flex");
-
-    var data = {
-      searchId: searchId, 
-      searchName: $("#editSearch" + searchId).val(), 
-    };
-    $.ajax({
-      url: "../Components/Function_Admin.php",
-      type: "post",
-      data: data,
-      success: function (response) {
-        // console.log(response);
-        // console.log(searchId);
-        $("#EditDropdown" + searchId).html(response);
-      },
-    });
+function editSearch(SearchType, searchId) {
+  if(SearchType == "Insert"){
+    const searchElement = $("#editSearch" + searchId);
+    if (searchElement.val().length === 0) {
+      searchElement.parent().siblings().css("display", "none");
+    } else {
+      searchElement.parent().siblings().css("display", "flex");
+  
+      var data = {
+        searchId: searchId, 
+        SearchType: SearchType, 
+        searchName: $("#editSearch" + searchId).val(), 
+      };
+      $.ajax({
+        url: "../Components/Function_Admin.php",
+        type: "post",
+        data: data,
+        success: function (response) {
+          // console.log(response);
+          // console.log(searchId);
+          $("#EditDropdown" + searchId).html(response);
+        },
+      });
+    }
   }
+
+  else if(SearchType == "Edit"){
+    const searchElement = $("#edit_Search" + searchId);
+    if (searchElement.val().length === 0) {
+      searchElement.parent().siblings().css("display", "none");
+    } else {
+      searchElement.parent().siblings().css("display", "flex");
+  
+      var data = {
+        searchId: searchId, 
+        SearchType: SearchType, 
+        searchName: $("#edit_Search" + searchId).val(), 
+      };
+      $.ajax({
+        url: "../Components/Function_Admin.php",
+        type: "post",
+        data: data,
+        success: function (response) {
+          // console.log(response);
+          // console.log(searchId);
+          $("#Edit_Dropdown" + searchId).html(response);
+        },
+      });
+    }
+
+
+    console.log("Edit Type");
+  }
+
 }
 
 
@@ -577,7 +602,7 @@ const scheduleArr = [];
 const secretaryArr = [];
 const roomArr = [];
 const hmoArr = [];
-function selectThis(selectedType, selectedId, selectedValue) {
+function selectThis(selectedType, selectedId, selectedCode) {
   const selectedElementId = $("#hiddenInformationFieldID" + selectedType);
   if (selectedType === "Specs") {
     selectedElementId.css("display", "flex");
@@ -587,7 +612,7 @@ function selectThis(selectedType, selectedId, selectedValue) {
     }  
     closeSearch(selectedId);
   
-    selectedItems(selectedIds);
+    selectedItems(selectedIds,selectedId,selectedCode);
     
     $("#editSearch1").val("");
     $(".hiddenContainer").css("display", "none");
@@ -634,6 +659,13 @@ function selectThis(selectedType, selectedId, selectedValue) {
   }
 
 
+
+
+  else if(selectedType === "EditSpecs"){
+
+  }
+
+
 }
 
 
@@ -644,11 +676,14 @@ function closeSearch(closeId) {
   searchElement.parent().siblings().css("display", "none");
 }
 
-
-function selectedItems(selectedIds){
-  // console.log(selectedIds);
+let selectedDoctorID = "";
+function selectedItems(selectedIds,selectedId,selectedCode){
+  console.log("Doctor ID: " + selectedDoctorID);
   var data = {
     functionSelectedItems: selectedIds,
+    selectedId: selectedId,
+    selectedCode: selectedCode,
+    selectedDoctorID: selectedDoctorID,
   };
   $.ajax({
     url: "../Components/Function_Admin.php",
@@ -656,7 +691,12 @@ function selectedItems(selectedIds){
     data: data,
     success: function (response) {
       // console.log(response);
-      $("#hiddenInformationFieldIDSpecs").html(response);
+      if(selectedCode === "InsertEditSpecs"){
+        
+      }
+      else{
+        $("#hiddenInformationFieldIDSpecs").html(response);
+      }
     },
   });
 }
@@ -891,9 +931,6 @@ function AddSecretary() {
       $("#SecretaryMobile2").val("");
       $("#selectNetwork1").val("-");
       $("#selectNetwork2").val("-");
-      $("#Firstname").val();
-      $("#Middlename").val();
-      $("#Lastname").val();
     },
   });
 }
@@ -902,17 +939,27 @@ function AddSecretary() {
 
 
 function UpdateDoctorDB(UpdateType, DoctorID){
+  var EditLastname = $("#EditLastName").val();
+  var EditFirstname = $("#EditFirstName").val();
+  var EditMiddlename = $("#EditMiddleName").val();
+  var EditGender = $("#EditGender").val();
+  var EditCategory = $("#EditCategory").val();
   var data = {
     UpdateDoctorType: UpdateType,
     DoctorID: DoctorID,
     UserID: UserID,
+    EditLastname: EditLastname,
+    EditFirstname: EditFirstname,
+    EditMiddlename: EditMiddlename,
+    EditGender: EditGender,
+    EditCategory: EditCategory,
   };
   $.ajax({
     url: "../Components/Function_Admin.php",
     type: "post",
     data: data,
     success: function (response) {
-      // console.log(response);
+      console.log(response);
       PopMessages(response)
       $(".tbody-doctor").load(location.href + " .tr-doctor");
       $(".tbody-archived").load(location.href + " .tr-archived");
@@ -939,3 +986,4 @@ function reloadDiv(UpdateDiv){
   // console.log(UpdateDiv);
   // $("#DIV").load(location.href + " #DashCount-7");
 }
+

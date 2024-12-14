@@ -608,23 +608,28 @@ if (isset($_POST["ViewEdit_ID"])) {
                 <br>
                 <div class='InputFieldForm'>
                   <i class='InputFieldForm-i'>First Name:</i>
-                  <input type='text' placeholder='First Name' value='".$row['doctor_firstname']."'>
+                  <input type='text' id='EditFirstName' placeholder='First Name' value='".$row['doctor_firstname']."'>
+                </div>
+                <br>
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Middle Name:</i>
+                  <input type='text' id='EditMiddleName' placeholder='Middle Name' value='".$row['doctor_middlename']."'>
                 </div>
                 <br>
                 <div class='InputFieldForm'>
                   <i class='InputFieldForm-i'>Gender:</i>
-                  <select name='' id=''>
-                    <option value='' $SelectedSexIsMale>Male</option>
-                    <option value='' $SelectedSexIsFemale>Female</option>
+                  <select name='EditGender' id='EditGender'>
+                    <option value='Male' $SelectedSexIsMale>Male</option>
+                    <option value='Female' $SelectedSexIsFemale>Female</option>
                   </select>
                 </div>
                 <br>
                 <h4>Category</h4>
                 <div class='InputFieldForm'>
                   <i class='InputFieldForm-i'>Category:</i>
-                  <select name='' id=''>
-                    <option value='' $DocCategoryRegular>Regular Consultant</option>
-                    <option value='' $DocCategoryWaiting>Visiting Consultant</option>
+                  <select name='' id='EditCategory'>
+                    <option value='Regular Consultant' $DocCategoryRegular>Regular Consultant</option>
+                    <option value='Visiting Consultant' $DocCategoryWaiting>Visiting Consultant</option>
                   </select>
                 </div>
                 <br>
@@ -632,21 +637,24 @@ if (isset($_POST["ViewEdit_ID"])) {
                 <br>
 
 
+
+
+
+
                 <h4>Specialization</h4>
                 <div class='InputFieldForm'>
                   <div class='InputFieldFormChild1'>
                     <i class='InputFieldForm-i'>Specialization:</i>
-                    <button class='Btn_1'>Add Specialization</button>
+                    <button class='Btn_1' onclick='AddItems(`Specs`)'>Add Specialization</button>
                   </div>
                   <div class='searchContainer-Parent'>
                     <div class='inputFlex'>
-                      <input type='text' onkeyup='editSearch(1)' id='editSearch1' placeholder='Search Specialization'>
+                      <input type='text' onkeyup='editSearch(`Edit`,1)' id='edit_Search1' class='CT1' placeholder='Search Specialization'>
                       <div class='inputFlexIcon' onclick='closeSearch(1)'><i class='fa-solid fa-xmark'></i></div>
                     </div>
                     
                     <div class='hiddenContainer'>
-                      <ul id='EditDropdown1'>
-                      
+                      <ul id='Edit_Dropdown1' class='EditDropdown1'>
                       </ul>
                     </div>
                   </div>
@@ -655,16 +663,27 @@ if (isset($_POST["ViewEdit_ID"])) {
                   <i class='InputFieldForm-i'></i>
                   <div class='InputFieldForm-i-div'>
                     <div class='hiddenInformationField' id='hiddenInformationFieldIDSpecs'>
-                      hello
-                    </div>
+                      <!-- Function -->
 
-                    <!-- 
-                    <div class='InformationField'>
-                      world
+                        "; 
+                          $DoctorSpecsFetchQuery = "SELECT * FROM doctor_specialization WHERE specialization_doctor_id = '$ViewEdit_ID'";
+                          $DoctorSpecsFetchQuery = mysqli_query($connMysqli, $DoctorSpecsFetchQuery);
+                          if (!$DoctorSpecsFetchQuery) {die('MySQL ErrorL ' . mysqli_error($conn));}
+                          if ($DoctorSpecsFetchQuery->num_rows > 0) {
+                            while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {echo" 
+                                <div class='ClickableList'><i class='fa-solid fa-trash'></i> <p>".$SpecsRow['doctor_specialization_name']."</p></div>
+                              ";
+                            }
+                          }
+                        echo "
+
+                        
                     </div>
-                    -->
                   </div>
                 </div>
+
+
+
 
                 <br>
 
@@ -877,6 +896,7 @@ if (isset($_POST["searchId"])) {
   global $connMysqli;
   $searchId = $_POST["searchId"];
   $searchName = $_POST["searchName"];
+  $SearchType = $_POST["SearchType"];
 
   if($searchId == 1){
     $DoctorSpecsFetchQuery = "SELECT * from specialization
@@ -885,9 +905,17 @@ if (isset($_POST["searchId"])) {
     $DoctorSpecsFetchQuery = mysqli_query($connMysqli, $DoctorSpecsFetchQuery);
     if (!$DoctorSpecsFetchQuery) {die('MySQL ErrorL ' . mysqli_error($conn));}
     if ($DoctorSpecsFetchQuery->num_rows > 0) {
-      while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {echo" 
-        <li onclick='selectThis(`Specs`,".$SpecsRow['specialization_id'].",`Specs1`)'><i class='fa-solid fa-plus'></i> <p>".$SpecsRow['specialization_name']."</p></li>
-        ";
+      while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {
+        if($SearchType == "Edit"){
+          echo" 
+            <li onclick='selectThis(`Specs`,".$SpecsRow['specialization_id'].",`InsertEditSpecs`)'><i class='fa-solid fa-plus'></i> <p>".$SpecsRow['specialization_id']."</p></li>
+          ";
+        }
+        else{
+          echo" 
+            <li onclick='selectThis(`Specs`,".$SpecsRow['specialization_id'].",`InsertSpecs1`)'><i class='fa-solid fa-plus'></i> <p>".$SpecsRow['specialization_name']."</p></li>
+          ";
+        }
       }
     }
     else{
@@ -950,26 +978,36 @@ if (isset($_POST["searchId"])) {
 if (isset($_POST["functionSelectedItems"])) {
   global $connMysqli;
   $functionSelectedArrayItems = $_POST["functionSelectedItems"];
+  $selectedId = $_POST["selectedId"];
+  $selectedCode = $_POST["selectedCode"];
 
-  if (!empty($functionSelectedArrayItems) && is_array($functionSelectedArrayItems)) {
-    $ids = implode(",", array_map('intval', $functionSelectedArrayItems));
-    $DoctorSpecsFetchQuery = "SELECT * FROM specialization WHERE specialization_id IN ($ids)";
-    // echo $DoctorSpecsFetchQuery; 
-
-    $DoctorSpecsFetchQuery = mysqli_query($connMysqli, $DoctorSpecsFetchQuery);
-    if (!$DoctorSpecsFetchQuery) {die('MySQL ErrorL ' . mysqli_error($conn));}
-    if ($DoctorSpecsFetchQuery->num_rows > 0) {
-      while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {echo" 
-        <p>".$SpecsRow['specialization_name']."</p>
-        ";
-      }
-    }
-    else{
-      echo "Nothing Found!";
-    }
-  } else {
-      echo "No valid items selected.";
+  if($selectedCode == "InsertEditSpecs"){
+      $InsertEditSpecs = $connPDO->prepare("INSERT INTO `doctor_specialization`(specialization_doctor_id, specialization_id_2, doctor_specialization_name) VALUES(?,?,?)");
+      $InsertEditSpecs->execute(['France', $selectedId, 'Updated']);
+      
+      echo "Insert new Edit Specs";
   }
+  else{
+    if (!empty($functionSelectedArrayItems) && is_array($functionSelectedArrayItems)) {
+      $ids = implode(",", array_map('intval', $functionSelectedArrayItems));
+      $DoctorSpecsFetchQuery = "SELECT * FROM specialization WHERE specialization_id IN ($ids)";
+      $DoctorSpecsFetchQuery = mysqli_query($connMysqli, $DoctorSpecsFetchQuery);
+      if (!$DoctorSpecsFetchQuery) {die('MySQL ErrorL ' . mysqli_error($conn));}
+      if ($DoctorSpecsFetchQuery->num_rows > 0) {
+        while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {echo" 
+            <div class='ClickableList'><i class='fa-solid fa-trash'></i> <p>".$SpecsRow['specialization_name']."</p></div>
+          ";
+        }
+      }
+      else{
+        echo "Nothing Found!";
+      }
+    } else {
+        echo "No valid items selected.";
+    }
+  }
+
+
 }
 
 
@@ -987,7 +1025,7 @@ if (isset($_POST["functionSelectedItems2"])) {
     if (!$DoctorSpecsFetchQuery) {die('MySQL ErrorL ' . mysqli_error($conn));}
     if ($DoctorSpecsFetchQuery->num_rows > 0) {
       while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {echo" 
-        <p>".$SpecsRow['sub_specialization_name']."</p>
+          <div class='ClickableList'><i class='fa-solid fa-trash'></i> <p>".$SpecsRow['sub_specialization_name']."</p></div>
         ";
       }
     }
@@ -1012,8 +1050,8 @@ if (isset($_POST["functionSelectedItems3"])) {
     $DoctorSpecsFetchQuery = mysqli_query($connMysqli, $DoctorSpecsFetchQuery);
     if (!$DoctorSpecsFetchQuery) {die('MySQL ErrorL ' . mysqli_error($conn));}
     if ($DoctorSpecsFetchQuery->num_rows > 0) {
-      while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {echo" 
-        <p>".$SpecsRow['room_floor_name']."</p>
+      while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {echo"
+          <div class='ClickableList'><i class='fa-solid fa-trash'></i> <p>".$SpecsRow['room_floor_name']."</p></div>
         ";
       }
     }
@@ -1040,7 +1078,7 @@ if (isset($_POST["functionSelectedItems4"])) {
     if (!$DoctorSpecsFetchQuery) {die('MySQL ErrorL ' . mysqli_error($conn));}
     if ($DoctorSpecsFetchQuery->num_rows > 0) {
       while ($SpecsRow = mysqli_fetch_assoc($DoctorSpecsFetchQuery)) {echo" 
-        <p>".$SpecsRow['hmo_name']."</p>
+          <div class='ClickableList'><i class='fa-solid fa-trash'></i> <p>".$SpecsRow['hmo_name']."</p></div>
         ";
       }
     }
@@ -1261,7 +1299,9 @@ if (isset($_POST["AddSchedule"])) {
 
   $arr = implode(",", $AddSchedule);
   foreach ($AddSchedule as $schedule) {
-    echo "<p>" . htmlspecialchars($schedule) . "</p>";
+    echo "
+      <div class='ClickableList'><i class='fa-solid fa-trash'></i> <p>". htmlspecialchars($schedule) ."</p></div>
+    ";
   }
 }
 
@@ -1276,7 +1316,7 @@ if (isset($_POST["AddSecretary"])) {
           echo "
           <div class='SecretaryCard'>
               <ul>
-                  <li><h3>" . htmlspecialchars($remarks['name']) . "</h3></li>
+                  <li><div class='SecHeader'><h3>" . htmlspecialchars($remarks['name']) . "</h3> <i class='fa-solid fa-trash'></i></div></li>
                   <li>" . htmlspecialchars($remarks['network']) . " - " . htmlspecialchars($remarks['number']) . "</li>
                   <li>" . htmlspecialchars($remarks['network2']) . " - " . htmlspecialchars($remarks['number2']) . "</li>
               </ul>
@@ -1304,7 +1344,6 @@ if (isset($_POST["UpdateDoctorType"])) {
   if ($FetchDoctorId->num_rows > 0) {
     while ($DocRow = mysqli_fetch_assoc($FetchDoctorId)) {
       $DocFullName = $DocRow['doctor_firstname'] . " " . $DocRow['doctor_middlename'] . " " . $DocRow['doctor_lastname'];
-      $EditDetails = "Remove Account of Dr. ".$DocFullName;
     }
   }else{echo "Nothing Found";}
 
@@ -1312,54 +1351,42 @@ if (isset($_POST["UpdateDoctorType"])) {
     $query = "UPDATE doctor SET doctor_archive_status = 'HIDDEN' WHERE doctor_account_id  = '$DoctorID'";
     mysqli_query($connMysqli, $query);
     $EventType = "Remove Account";
-    echo "Account Deactivated.";
+    $EditDetails = "Remove Account of Dr. ".$DocFullName;
+    // echo "Account Deactivated.";
 
   }
 
   elseif($UpdateDoctorType == "Restore"){
-    $query = "UPDATE doctor SET doctor_archive_status = 'VISIBLE'WHERE doctor_account_id  = '$DoctorID'";
+    $query = "UPDATE doctor SET doctor_archive_status = 'VISIBLE' WHERE doctor_account_id  = '$DoctorID'";
     mysqli_query($connMysqli, $query);
     $EventType = "Restore Account";
-    echo "Account Restored.";
+    $EditDetails = "Restore Account of Dr. ".$DocFullName;
+    // echo "Account Restored.";
   }
 
   elseif($UpdateDoctorType == "Edit"){
-    $query = "UPDATE doctor SET doctor_archive_status = 'VISIBLE'WHERE doctor_account_id  = '$DoctorID'";
+
+    $EditLastname = $_POST["EditLastname"];
+    $EditFirstname = $_POST["EditFirstname"];
+    $EditMiddlename = $_POST["EditMiddlename"];
+    $EditGender = $_POST["EditGender"];
+    $EditCategory = $_POST["EditCategory"];
+
+    $query = "UPDATE doctor SET 
+    doctor_lastname = '$EditLastname', 
+    doctor_firstname = '$EditFirstname', 
+    doctor_middlename = '$EditMiddlename',
+    doctor_sex = '$EditGender',
+    doctor_category = '$EditCategory'
+    WHERE doctor_account_id  = '$DoctorID'";
     mysqli_query($connMysqli, $query);
-    $EventType = "Restore Account";
-    echo "Account Restored.";
+    $EventType = "Update Account";
+    $EditDetails = "Update Account of Dr. ".$DocFullName;
+    echo "Account Updated.";
   }
-  
-  $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
-  $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+  // $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+  // $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
 }
-
-
-\
-
-
-
-// UPDATE DOCTOR
-if (isset($_POST["UpdateDoctor"])) {
-  global $connMysqli;
-  $UpdateDoctor = $_POST["UpdateDoctor"];
-  $DoctorID = $_POST["DoctorID"];
-
-  
-  $query = "UPDATE doctor SET doctor_firstname = '', doctor_middlename = '', doctor_lastname = '' WHERE doctor_account_id  = '$DoctorID'";
-  mysqli_query($connMysqli,
-
-    $secretary['Firstname'],
-    $secretary['Middlename'],
-    $secretary['Lastname'],
-  );
-  echo "Account Updated.";
-}
-
-
-
-
-
 
 
 

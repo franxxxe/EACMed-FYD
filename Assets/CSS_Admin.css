@@ -1239,6 +1239,17 @@ tr:hover {
   padding: 5px;
 }
 
+.SecHeader{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.SecHeader i{
+  color: var(--Color3);
+  font-size: 16px;
+}
 
 .InputFieldForm .InformationField .SecretaryCard ul{
   line-height: 10px;
@@ -1259,4 +1270,22 @@ tr:hover {
 .tableActivityLogs thead tr th,
 .tableActivityLogs thead tr td{
   text-align: left;
+}
+
+
+.ClickableList{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: var(--Border1);
+  padding: 4px 0;
+  border-radius: 4px;
+}
+
+
+.ClickableList i{
+  padding: 5px 8px;
+  cursor: pointer;
+  color: var(--Color3);
+  border-right: var(--Border1);
 }

@@ -654,7 +654,7 @@
                       </div>
                       <div class='searchContainer-Parent'>
                         <div class='inputFlex'>
-                          <input type='text' onkeyup='editSearch(1)' id='editSearch1' class="CT1" placeholder='Search Specialization'>
+                          <input type='text' onkeyup='editSearch(`Insert`,1)' id='editSearch1' class="CT1" placeholder='Search Specialization'>
                           <div class='inputFlexIcon' onclick='closeSearch(1)'><i class='fa-solid fa-xmark'></i></div>
                         </div>
                         
@@ -682,7 +682,7 @@
                       </div>
                       <div class='searchContainer-Parent'>
                         <div class='inputFlex'>
-                          <input type='text' onkeyup='editSearch(2)' id='editSearch2' class="CT1" placeholder='Search Sub Specialization'>
+                          <input type='text' onkeyup='editSearch(`Insert`,2)' id='editSearch2' class="CT1" placeholder='Search Sub Specialization'>
                           <div class='inputFlexIcon' onclick='closeSearch(1)'><i class='fa-solid fa-xmark'></i></div>
                         </div>
                         
@@ -761,7 +761,7 @@
                       </div>
                       <div class='searchContainer-Parent'>
                         <div class='inputFlex'>
-                          <input type='text' onkeyup='editSearch(3)' id='editSearch3' class="CT1" placeholder='Search Room'>
+                          <input type='text' onkeyup='editSearch(`Insert`,3)' id='editSearch3' class="CT1" placeholder='Search Room'>
                           <div class='inputFlexIcon' onclick='closeSearch(1)'><i class='fa-solid fa-xmark'></i></div>
                         </div>
                         
@@ -800,7 +800,7 @@
                       </div>
                       <div class='searchContainer-Parent'>
                         <div class='inputFlex'>
-                          <input type='text' onkeyup='editSearch(4)' id='editSearch4' class="CT1" placeholder='Search HMO'>
+                          <input type='text' onkeyup='editSearch(`Insert`,4)' id='editSearch4' class="CT1" placeholder='Search HMO'>
                           <div class='inputFlexIcon' onclick='closeSearch(1)'><i class='fa-solid fa-xmark'></i></div>
                         </div>
                         
