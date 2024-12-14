@@ -980,10 +980,11 @@ if (isset($_POST["functionSelectedItems"])) {
   $functionSelectedArrayItems = $_POST["functionSelectedItems"];
   $selectedId = $_POST["selectedId"];
   $selectedCode = $_POST["selectedCode"];
+  $selectedDoctorID = $_POST["selectedDoctorID"];
 
   if($selectedCode == "InsertEditSpecs"){
       $InsertEditSpecs = $connPDO->prepare("INSERT INTO `doctor_specialization`(specialization_doctor_id, specialization_id_2, doctor_specialization_name) VALUES(?,?,?)");
-      $InsertEditSpecs->execute(['France', $selectedId, 'Updated']);
+      $InsertEditSpecs->execute([$selectedDoctorID, $selectedId, 'Updated']);
       
       echo "Insert new Edit Specs";
   }
@@ -1384,8 +1385,8 @@ if (isset($_POST["UpdateDoctorType"])) {
     $EditDetails = "Update Account of Dr. ".$DocFullName;
     echo "Account Updated.";
   }
-  // $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
-  // $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+  $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+  $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
 }
 
 
