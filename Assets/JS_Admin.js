@@ -1,6 +1,5 @@
 function LinkToLogout() {
   location.href = "../Admin - Panel/Logout.php";
-  console.log("Logout successfully!");
 }
 
 function BTNDashboard() {
@@ -250,9 +249,6 @@ function ViewDoctor(ViewDoctorType,ViewDoctor_ID) {
           $(".Modal-Sidebar-Bottom").css("display", "none");
         }
       }
-      else if(ViewDoctorType == "Restore"){
-        console.log("Restore");
-      }
     },
   });
 }
@@ -271,7 +267,7 @@ function EditDoctor(ViewEdit_ID) {
     type: "post",
     data: data,
     success: function (response) {
-      console.log(response);
+      // console.log(response);
       $(".Modal-EditDoctor").html(response);
     },
   });
@@ -538,22 +534,7 @@ function Yes_ResetPasswordAdmin(Yes_ResetPasswordAdmin_ID) {
 
 
 
-function reloadDiv(UpdateDiv){
-  $(".tbody-doctor").load(location.href + " .tr-doctor");
-  $(".tbodyActivityLogs").load(location.href + " .tr-ActivityLogs");
-  $(".tbody-archived").load(location.href + " .tr-archived");
-  $(".account-tbody").load(location.href + " .account-tr");
 
-  $("#DashCount1").load(location.href + " #DashCount-1");
-  $("#DashCount2").load(location.href + " #DashCount-2");
-  $("#DashCount3").load(location.href + " #DashCount-3");
-  $("#DashCount4").load(location.href + " #DashCount-4");
-  $("#DashCount5").load(location.href + " #DashCount-5");
-  $("#DashCount6").load(location.href + " #DashCount-6");
-  $("#DashCount7").load(location.href + " #DashCount-7");
-
-  // $("#DIV").load(location.href + " #DashCount-7");
-}
 
 
 
@@ -751,7 +732,6 @@ function AddItems(ItemType){
 
 
 function InsertDocData(ItemType){
-
   if(ItemType == "Room"){
     const InsertDataFloorLevel = $("#InsertDataFloorLevel").val();
     const InsertDataFloorNumber = $("#InsertDataRoomNumber").val();
@@ -770,15 +750,15 @@ function InsertDocData(ItemType){
     type: "post",
     data: data,
     success: function (response) {
-      console.log(response);
-    $("#InsertDataName").val("");
-    $(".Add-Items-Message").css("display", "flex");
-    $(".Add-Items-Message").html(response);
+      // console.log(response);
+      $("#InsertDataName").val("");
+      $(".Add-Items-Message").css("display", "flex");
+      $(".Add-Items-Message").html(response);
 
-    const myTimeout = setTimeout(timer2, 3000);
-    function timer2() {
-      $(".Add-Items-Message").css("display", "none");
-    }
+      const myTimeout = setTimeout(timer2, 3000);
+      function timer2() {
+        $(".Add-Items-Message").css("display", "none");
+      }
     },
   });
 }
@@ -903,7 +883,7 @@ function AddSecretary() {
     type: "post",
     data: { AddSecretary: secretaryArr },
     success: function (response) {
-      console.log(response);
+      // console.log(response);
       $(".InformationFieldAddSecretary").html(response);
 
       $("#DoctorsSecretaryName").val("");
@@ -911,6 +891,9 @@ function AddSecretary() {
       $("#SecretaryMobile2").val("");
       $("#selectNetwork1").val("-");
       $("#selectNetwork2").val("-");
+      $("#Firstname").val();
+      $("#Middlename").val();
+      $("#Lastname").val();
     },
   });
 }
@@ -918,14 +901,11 @@ function AddSecretary() {
 
 
 
-
-
-
 function UpdateDoctorDB(UpdateType, DoctorID){
-  console.log(DoctorID);
   var data = {
     UpdateDoctorType: UpdateType,
     DoctorID: DoctorID,
+    UserID: UserID,
   };
   $.ajax({
     url: "../Components/Function_Admin.php",
@@ -936,10 +916,26 @@ function UpdateDoctorDB(UpdateType, DoctorID){
       PopMessages(response)
       $(".tbody-doctor").load(location.href + " .tr-doctor");
       $(".tbody-archived").load(location.href + " .tr-archived");
-      
-      reloadDiv(UpdateDiv);
+      reloadDiv('UpdateDiv');
     },
   });
 }
 
 
+function reloadDiv(UpdateDiv){
+  $(".tbody-doctor").load(location.href + " .tr-doctor");
+  $(".tbodyActivityLogs").load(location.href + " .tr-ActivityLogs");
+  $(".tbody-archived").load(location.href + " .tr-archived");
+  $(".account-tbody").load(location.href + " .account-tr");
+
+  $("#DashCount1").load(location.href + " #DashCount-1");
+  $("#DashCount2").load(location.href + " #DashCount-2");
+  $("#DashCount3").load(location.href + " #DashCount-3");
+  $("#DashCount4").load(location.href + " #DashCount-4");
+  $("#DashCount5").load(location.href + " #DashCount-5");
+  $("#DashCount6").load(location.href + " #DashCount-6");
+  $("#DashCount7").load(location.href + " #DashCount-7");
+
+  // console.log(UpdateDiv);
+  // $("#DIV").load(location.href + " #DashCount-7");
+}

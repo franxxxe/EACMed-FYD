@@ -515,12 +515,17 @@
                   <?php
                   $FetchActivityLogs = "SELECT * FROM admin_activity_logs
                   INNER JOIN admin_accounts ON admin_activity_logs.activity_logs_admin_id = admin_accounts.admin_id
+                  ORDER BY admin_activity_logs_id DESC;
                   ";
                   $FetchActivityLogs = mysqli_query($connMysqli, $FetchActivityLogs);
                   while ($row = mysqli_fetch_assoc($FetchActivityLogs)) {
+                    $timestamp = strtotime($row['time_stamp']);
+                    $time_stamp = date('M-d-Y h:i:s A', $timestamp);
+
+
                     echo "
                         <tr class='tr-ActivityLogs'>
-                          <td>".$row['time_stamp']."</td>
+                          <td>".$time_stamp."</td>
                           <td>".$row['admin_username']."</td>
                           <td>".$row['event_type']."</td>
                           <td>".$row['edit_details']."</td>
@@ -969,7 +974,7 @@
               <p class="P-Message">Are you sure you want to update this doctor?</p>
             </div>
             <div class="Prompt-Message-Bottom">
-              <button class="Btn_1">Yes</button>
+              <button class="Btn_1" onclick="UpdateDoctorDB('Edit', DoctorID)">Yes</button>
               <button class="Btn_2" onclick="HidePromptMessage()">No</button>
             </div>
           </div>

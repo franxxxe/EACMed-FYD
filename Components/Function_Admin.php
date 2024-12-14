@@ -600,12 +600,10 @@ if (isset($_POST["ViewEdit_ID"])) {
             <div class='editDoctor-Container'>
 
               <div class='editDoctor-Child1'>
-              
-
                 <h4>Doctor</h4>
                 <div class='InputFieldForm'>
                   <i class='InputFieldForm-i'>Last Name:</i>
-                  <input type='text' placeholder='Last Name' value='".$row['doctor_lastname']."'>
+                  <input type='text' id='EditLastName' placeholder='Last Name' value='".$row['doctor_lastname']."'>
                 </div>
                 <br>
                 <div class='InputFieldForm'>
@@ -662,7 +660,7 @@ if (isset($_POST["ViewEdit_ID"])) {
 
                     <!-- 
                     <div class='InformationField'>
-                      worlddd
+                      world
                     </div>
                     -->
                   </div>
@@ -1297,27 +1295,66 @@ if (isset($_POST["UpdateDoctorType"])) {
   global $connMysqli;
   $UpdateDoctorType = $_POST["UpdateDoctorType"];
   $DoctorID = $_POST["DoctorID"];
+  $UserID = $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
+
+  $FetchDoctorId = "SELECT * FROM doctor WHERE doctor_account_id = '$DoctorID' ";
+  $FetchDoctorId = mysqli_query($connMysqli, $FetchDoctorId);
+  if (!$FetchDoctorId) {die('MySQL ErrorL ' . mysqli_error($conn));}
+  if ($FetchDoctorId->num_rows > 0) {
+    while ($DocRow = mysqli_fetch_assoc($FetchDoctorId)) {
+      $DocFullName = $DocRow['doctor_firstname'] . " " . $DocRow['doctor_middlename'] . " " . $DocRow['doctor_lastname'];
+      $EditDetails = "Remove Account of Dr. ".$DocFullName;
+    }
+  }else{echo "Nothing Found";}
 
   if($UpdateDoctorType == "Delete"){
-    $query = "UPDATE doctor SET 
-    doctor_archive_status = 'HIDDEN'
-    WHERE doctor_account_id  = '$DoctorID'";
+    $query = "UPDATE doctor SET doctor_archive_status = 'HIDDEN' WHERE doctor_account_id  = '$DoctorID'";
     mysqli_query($connMysqli, $query);
+    $EventType = "Remove Account";
     echo "Account Deactivated.";
+
   }
 
   elseif($UpdateDoctorType == "Restore"){
-    $query = "UPDATE doctor SET 
-    doctor_archive_status = 'VISIBLE'
-    WHERE doctor_account_id  = '$DoctorID'";
+    $query = "UPDATE doctor SET doctor_archive_status = 'VISIBLE'WHERE doctor_account_id  = '$DoctorID'";
     mysqli_query($connMysqli, $query);
+    $EventType = "Restore Account";
     echo "Account Restored.";
   }
 
-  // echo  $DoctorID;
+  elseif($UpdateDoctorType == "Edit"){
+    $query = "UPDATE doctor SET doctor_archive_status = 'VISIBLE'WHERE doctor_account_id  = '$DoctorID'";
+    mysqli_query($connMysqli, $query);
+    $EventType = "Restore Account";
+    echo "Account Restored.";
+  }
+  
+  $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+  $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
 }
 
 
+\
+
+
+
+// UPDATE DOCTOR
+if (isset($_POST["UpdateDoctor"])) {
+  global $connMysqli;
+  $UpdateDoctor = $_POST["UpdateDoctor"];
+  $DoctorID = $_POST["DoctorID"];
+
+  
+  $query = "UPDATE doctor SET doctor_firstname = '', doctor_middlename = '', doctor_lastname = '' WHERE doctor_account_id  = '$DoctorID'";
+  mysqli_query($connMysqli,
+
+    $secretary['Firstname'],
+    $secretary['Middlename'],
+    $secretary['Lastname'],
+  );
+  echo "Account Updated.";
+}
 
 
 
