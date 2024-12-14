@@ -6,7 +6,25 @@
     $ACCOUNT = "SELECT * FROM admin_accounts WHERE `admin_id`= '$Admin_id' ";
     $ACCOUNT = mysqli_query($connMysqli, $ACCOUNT);
     while ($row = mysqli_fetch_assoc($ACCOUNT)) {
+      $user_id = $row['admin_id'];
       $AdminName = $row['admin_username'];
+
+      // ENCRYPT ID
+      function encrypt_user_id($user_id) {
+        $encryption_key = 'your-encryption-key';
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted_user_id = openssl_encrypt($user_id, 'aes-256-cbc', $encryption_key, 0, $iv);
+        return base64_encode($encrypted_user_id . '::' . $iv);
+      }
+      // DECRYPT ID
+      function decrypt_user_id($encrypted_data) {
+        $encryption_key = 'your-encryption-key';
+        list($encrypted_user_id, $iv) = explode('::', base64_decode($encrypted_data), 2);
+        return openssl_decrypt($encrypted_user_id, 'aes-256-cbc', $encryption_key, 0, $iv);
+      }
+      $encrypted_user_id = encrypt_user_id($user_id);
+      $decrypted_user_id = decrypt_user_id($encrypted_user_id);
+
     }
     // ACCOUNT ACCESS
     $ACCESS = "SELECT * FROM admin_accounts WHERE `admin_id`= '$Admin_id' AND (account_access = 'Super Admin')";
@@ -135,31 +153,31 @@
                 <div class="Dashboard-Box-Ch Dashboard-Box1-Ch">
                   <div class="Dashboard-Box-Total">
                     <p>Total Doctors</p>
-                    <h2><i class="fa-solid fa-user-doctor"></i> <?php echo" $CountTotalDoctor"?></h2>
+                    <h2 id="DashCount1"> <span id="DashCount-1"><i class="fa-solid fa-user-doctor"></i> <?php echo" $CountTotalDoctor"?></span></h2>
                   </div>
                   <div class="Dashboard-Box-Total">
                     <p>Total Active Doctors</p>
-                    <h2><i class="fa-solid fa-user-large"></i> <?php echo" $CountTotalActiveDoctor"?></h2>
+                    <h2 id="DashCount2"> <span id="DashCount-2"> <i class="fa-solid fa-user-large"></i> <?php echo" $CountTotalActiveDoctor"?></span></h2>
                   </div>
                   <div class="Dashboard-Box-Total">
                     <p>Total Inactive Doctors</p>
-                    <h2><i class="fa-solid fa-user-large-slash"></i> <?php echo" $CountTotalInActiveDoctor"?></h2>
+                    <h2 id="DashCount3"> <span id="DashCount-3"> <i class="fa-solid fa-user-large-slash"></i> <?php echo" $CountTotalInActiveDoctor"?></span></h2>
                   </div>
                   <div class="Dashboard-Box-Total">
                     <p>Total Admins</p>
-                    <h2><i class="fa-solid fa-user-tie"></i> <?php echo" $CountTotalAdmin"?></h2>
+                    <h2 id="DashCount4"> <span id="DashCount-4"> <i class="fa-solid fa-user-tie"></i> <?php echo" $CountTotalAdmin"?></span></h2>
                   </div>
                   <div class="Dashboard-Box-Total">
                     <p>Total Visiting Consultation</p>
-                    <h2><i class="fa-solid fa-user-nurse"></i> <?php echo" $CountTotalVisitingConsultation"?></h2>
+                    <h2 id="DashCount5"> <span id="DashCount-5"> <i class="fa-solid fa-user-nurse"></i> <?php echo" $CountTotalVisitingConsultation"?></span></h2>
                   </div>
                   <div class="Dashboard-Box-Total">
                     <p>Total Regular Consultation</p>
-                    <h2><i class="fa-solid fa-hospital-user"></i> <?php echo" $CountTotalRegularConsultation"?></h2>
+                    <h2 id="DashCount6"> <span id="DashCount-6"> <i class="fa-solid fa-hospital-user"></i> <?php echo" $CountTotalRegularConsultation"?></span></h2>
                   </div>
                   <div class="Dashboard-Box-Total">
                     <p>Total HMOs</p>
-                    <h2><i class="fa-solid fa-briefcase"></i> <?php echo" $CountTotalHMO"?></h2>
+                    <h2 id="DashCount7"> <span id="DashCount-7"> <i class="fa-solid fa-briefcase"></i> <?php echo" $CountTotalHMO"?></span></h2>
                   </div>
                 </div>
 
@@ -197,22 +215,15 @@
                           $Id++;
                         }
                       ?>
-
-
-
-
-
-
-
                       <div id="DIV">
                         <div id="chart"></div>
                       </div>
                     </div>
+
+
                     <div class="">
                       <h4>TOP 5 HMO</h4>
-                      <input type="hidden" id="chartInput" value="">
-
-
+                        <!-- <input type="hidden" id="chartInput" value=""> -->
                         <?php  
                           $DoctorHMO = "SELECT 
                             hmo.hmo_id, 
@@ -489,31 +500,31 @@
           </div>
           <div class="MainDiv-Main DoctorsDiv-Main">
             <div class="Table-Div">
-              <table>
+              <table class="tableActivityLogs">
                 <thead>
                   <tr class="Tr-Header">
                     <th>Date/Time</th>
                     <th>Event By</th>
                     <th>Event Type</th>
-                    <th>Before Event</th>
-                    <th>After Event</th>
-                    <th>Event Location</th>
+                    <th>Event Details</th>
+                    <!-- <th>Event Location</th> -->
                     <th>Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody class="tbodyActivityLogs">
                   <?php
-                  $FetchAdmin = "SELECT * FROM admin_accounts";
-                  $FetchAdmin = mysqli_query($connMysqli, $FetchAdmin);
-                  while ($row = mysqli_fetch_assoc($FetchAdmin)) {
+                  $FetchActivityLogs = "SELECT * FROM admin_activity_logs
+                  INNER JOIN admin_accounts ON admin_activity_logs.activity_logs_admin_id = admin_accounts.admin_id
+                  ";
+                  $FetchActivityLogs = mysqli_query($connMysqli, $FetchActivityLogs);
+                  while ($row = mysqli_fetch_assoc($FetchActivityLogs)) {
                     echo "
-                        <tr>
-                          <td>April 24, 2024 18:00</td>
-                          <td>Oliver</td>
-                          <td>Edit Doctor: Dr. Rosario U. Santiago</td>
-                          <td>Secretary: Sophia Marie L. Cruz</td>
-                          <td>Secretary: Adrian S. Magdangal</td>
-                          <td>Doctors</td>
+                        <tr class='tr-ActivityLogs'>
+                          <td>".$row['time_stamp']."</td>
+                          <td>".$row['admin_username']."</td>
+                          <td>".$row['event_type']."</td>
+                          <td>".$row['edit_details']."</td>
+                          <!-- <td>".$row['admin_username']."</td> -->
                           <td><button class='Btn_1' onclick='ViewAdmin()'><i class='fa-regular fa-eye'></i> View</button></td>
                         </tr>
                       ";
@@ -696,7 +707,8 @@
                     <div class='InputFieldForm'>
                       <i class='InputFieldForm-i'>Schedule:</i>
                       <div class='InputFieldForm-div'>
-                        <div class='InputFieldForm-schedule'>
+                        <div class="InputFieldFormSchedule">
+                          <div class='InputFieldForm-schedule'>
                           <p>Select Day</p>
                           <select id='day-select' name='day-select'>
                             <option value='Monday'>Monday</option>
@@ -720,6 +732,7 @@
                           <div class='InputFieldForm-schedule'>
                             <button class='Btn_1' onclick="AddSchedule()">Add</button>
                           </div>
+                        </div>
                         </div>
                       </div>
                     </div>
@@ -802,13 +815,13 @@
                       </div>
                     </div>
 
-
+                    <br>
+                    <hr>
                     <br>
                     <h4>Remarks</h4>
                     <div class="InputFieldForm">
                       <i class="InputFieldForm-i">Remarks:</i>
                       <textarea name="" id="DoctorsRemarks" class="DoctorRemarks" placeholder="Input Notes"></textarea>
-                      <!-- <input type="text" id="DoctorsTeleConsult" placeholder="Teleconsultaion" class="CT1"> -->
                     </div>
                     <br>
 
@@ -820,36 +833,47 @@
                     <div class='InputFieldForm'>
                       <i class='InputFieldForm-i'>Secretary:</i>
                       <div class='InputFieldForm-div'>
-                        <div class='InputFieldForm-schedule'>
-                          <p>Select Day</p>
-                          <select id='day-select' name='day-select'>
-                            <option value='Monday'>Monday</option>
-                            <option value='Tuesday'>Tuesday</option>
-                            <option value='Wednesday'>Wednesday</option>
-                            <option value='Thursday'>Thursday</option>
-                            <option value='Friday'>Friday</option>
-                            <option value='Saturday'>Saturday</option>
-                            <option value='Sunday'>Sunday</option>
-                          </select>
+                        <div class=''>
+                          <p>Secretary Name</p>
+                          <input type="text" id="DoctorsSecretaryName" placeholder="Ex. Maria Angelica Cruz" class="CT1">
                         </div>
-                        <div class='InputFieldForm-divFlexColumn'>
-                          <div class='InputFieldForm-schedule'>
-                            <p>Time Start</p>
-                            <input type='time' id='pick-timeIn' name='pick-time'>
-                          </div>
-                          <div class='InputFieldForm-schedule'>
-                            <p>Time End</p>
-                            <input type='time' id='pick-timeOut' name='pick-time'>
-                          </div>
-                          <div class='InputFieldForm-schedule'>
-                            <button class='Btn_1' onclick="AddSchedule()">Add</button>
+                        <div class="">
+                          <p>Primary Number </p>
+                          <div class='InputFieldForm-divFlexColumn'>
+                            <input type="number" id="SecretaryMobile1" placeholder="Required">
+                            <select id='selectNetwork1' name='selectNetwork1'>
+                              <option value='-' selected disabled>Network</option>
+                              <option value='Globe'>Globe</option>
+                              <option value='Smart'>Smart</option>
+                              <option value='DITO'>DITO</option>
+                              <option value='Sun'>Sun</option>
+                              <option value='Cherry Prepaid'>Cherry Prepaid</option>
+                              <option value='GOMO'>GOMO</option>
+                            </select>
                           </div>
                         </div>
+                        <div class="">
+                          <p>Secondary Number </p>
+                          <div class='InputFieldForm-divFlexColumn'>
+                            <input type="number" id="SecretaryMobile2" placeholder="Optional">
+                            <select id='selectNetwork2' name='selectNetwork2'>
+                              <option value='-' selected disabled>Network</option>
+                              <option value='Globe'>Globe</option>
+                              <option value='Smart'>Smart</option>
+                              <option value='DITO'>DITO</option>
+                              <option value='Sun'>Sun</option>
+                              <option value='Cherry Prepaid'>Cherry Prepaid</option>
+                              <option value='GOMO'>GOMO</option>
+                            </select>
+                          </div>
+                        </div>
+                        <button class="Btn_1" onclick="AddSecretary()">Add Secretary</button>
                       </div>
                     </div>
+
                     <div class='InputFieldForm'>
                       <i class='InputFieldForm-i'></i>
-                      <div class='InformationField InformationFieldAddSchedule'>
+                      <div class='InformationField InformationFieldAddSecretary'>
                         <!-- Function -->
                       </div>
                     </div>
@@ -1021,6 +1045,6 @@
     <!-- END -->
 
   </div>
+  <script>var UserID = '<?= $encrypted_user_id ?>';</script>
 </body>
-
 </html>

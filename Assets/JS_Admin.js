@@ -384,10 +384,12 @@ function InsertNewDoctor(InsertDoctor) {
     Specialization: selectedIds,
     SubSpecialization: selectedIds2,
     Schedule: scheduleArr,
+    Secretary: secretaryArr,
+    Remarks: $("#DoctorsRemarks").val(),
     Room: roomArr,
     HMOAccreditation: hmoArr,
     TeleConsultation: $("#DoctorsTeleConsult").val(),
-    Remarks: $("#DoctorsRemarks").val(),
+    UserID: UserID,
 
     Category: $("#DoctorCategory").val(),
     PrimarySecretary: $("#DoctorsFirstName").val(),
@@ -404,8 +406,8 @@ function InsertNewDoctor(InsertDoctor) {
     type: "post",
     data: data,
     success: function (response) {
-      console.log(response);
-      $(".tbody-doctor").load(location.href + " .tr-doctor");
+      // console.log(response);
+      reloadDiv('account_table');
       $(".Modal-Container").css("display", "none");
       $(".hiddenContainer").css("display", "none");
       clearText();
@@ -418,6 +420,7 @@ function InsertNewDoctor(InsertDoctor) {
   selectedIds.splice(0, selectedIds.length);
   selectedIds2.splice(0, selectedIds2.length);
   scheduleArr.splice(0, scheduleArr.length);
+  secretaryArr.splice(0, secretaryArr.length);
   roomArr.splice(0, roomArr.length);
   hmoArr.splice(0, hmoArr.length);
   
@@ -425,15 +428,18 @@ function InsertNewDoctor(InsertDoctor) {
   $("#hiddenInformationFieldIDSpecs2").html("");
 
   $("#hiddenInformationFieldIDSubSpecs").html("");
-  $("#day-select").html("");
+  $("#DoctorsRemarks").val("");
+  $("#day-select").val("Monday");
   $("#pick-timeIn").html("");
   $("#pick-timeOut").html("");
   $("#DoctorsRemarks").html("");
 
 
   $(".InformationFieldAddSchedule").html("");
+  $(".InformationFieldAddSecretary").html("");
   $("#hiddenInformationFieldIDRoom").html("");
   $("#hiddenInformationFieldIDHMO").html("");
+  $(".Prompt-Message").css("display","none");
 
 }
 
@@ -532,10 +538,21 @@ function Yes_ResetPasswordAdmin(Yes_ResetPasswordAdmin_ID) {
 
 
 
-function reloadDiv(table_name){
-  if(table_name == "account_table"){
-    $(".account-tbody").load(location.href + " .account-tr");
-  }
+function reloadDiv(UpdateDiv){
+  $(".tbody-doctor").load(location.href + " .tr-doctor");
+  $(".tbodyActivityLogs").load(location.href + " .tr-ActivityLogs");
+  $(".tbody-archived").load(location.href + " .tr-archived");
+  $(".account-tbody").load(location.href + " .account-tr");
+
+  $("#DashCount1").load(location.href + " #DashCount-1");
+  $("#DashCount2").load(location.href + " #DashCount-2");
+  $("#DashCount3").load(location.href + " #DashCount-3");
+  $("#DashCount4").load(location.href + " #DashCount-4");
+  $("#DashCount5").load(location.href + " #DashCount-5");
+  $("#DashCount6").load(location.href + " #DashCount-6");
+  $("#DashCount7").load(location.href + " #DashCount-7");
+
+  // $("#DIV").load(location.href + " #DashCount-7");
 }
 
 
@@ -576,6 +593,7 @@ function editSearch(searchId) {
 const selectedIds = [];
 const selectedIds2 = [];
 const scheduleArr = [];
+const secretaryArr = [];
 const roomArr = [];
 const hmoArr = [];
 function selectThis(selectedType, selectedId, selectedValue) {
@@ -834,7 +852,7 @@ function AddSchedule() {
     type: "post",
     data: data,
     success: function (response) {
-      console.log(response);
+      // console.log(response);
       $(".InformationFieldAddSchedule").html(response);
     },
   });
@@ -846,6 +864,59 @@ function formatTime(time) {
   const formattedHours = hours % 12 || 12; 
   return `${formattedHours}:${minutes}${period}`;
 }
+
+
+function AddSecretary() {
+  const DoctorsSecretaryName = $("#DoctorsSecretaryName").val();
+  const SecretaryMobile1 = $("#SecretaryMobile1").val();
+  const SecretaryMobile2 = $("#SecretaryMobile2").val();
+  const selectNetwork1 = $("#selectNetwork1").val();
+  const selectNetwork2 = $("#selectNetwork2").val();
+
+  const formattedMobile1 = `'${SecretaryMobile1}'`; 
+  const formattedMobile2 = `'${SecretaryMobile2}'`; 
+
+  const secretaryObject = {
+    name: DoctorsSecretaryName,
+    number: SecretaryMobile1,
+    number2: SecretaryMobile2,
+    network: selectNetwork1,
+    network2: selectNetwork2,
+  };
+
+  const exists = secretaryArr.some(
+    (item) =>
+      item.name === secretaryObject.name &&
+      item.number === secretaryObject.number &&
+      item.network === secretaryObject.network &&
+      item.number2 === secretaryObject.number2 &&
+      item.network2 === secretaryObject.network2
+  );
+
+  if (!exists) {
+    secretaryArr.push(secretaryObject);
+  } else {
+    console.warn("This Secretary already exists:", secretaryObject);
+  }
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: { AddSecretary: secretaryArr },
+    success: function (response) {
+      console.log(response);
+      $(".InformationFieldAddSecretary").html(response);
+
+      $("#DoctorsSecretaryName").val("");
+      $("#SecretaryMobile1").val("");
+      $("#SecretaryMobile2").val("");
+      $("#selectNetwork1").val("-");
+      $("#selectNetwork2").val("-");
+    },
+  });
+}
+
+
+
 
 
 
@@ -865,7 +936,8 @@ function UpdateDoctorDB(UpdateType, DoctorID){
       PopMessages(response)
       $(".tbody-doctor").load(location.href + " .tr-doctor");
       $(".tbody-archived").load(location.href + " .tr-archived");
-      // $(".InformationFieldAddSchedule").html(response);
+      
+      reloadDiv(UpdateDiv);
     },
   });
 }

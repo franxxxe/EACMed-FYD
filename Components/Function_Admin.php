@@ -13,6 +13,12 @@ function generateDoctorAccountId() {
   return $accountId;
 }
 
+// DECRYPT ID
+function decrypt_user_id($encrypted_data) {
+  $encryption_key = 'your-encryption-key';
+  list($encrypted_user_id, $iv) = explode('::', base64_decode($encrypted_data), 2);
+  return openssl_decrypt($encrypted_user_id, 'aes-256-cbc', $encryption_key, 0, $iv);
+}
 
 // PAGINATION
 if (isset($_POST["page"])) {
@@ -56,19 +62,14 @@ if (isset($_POST["InsertDoctor"])) {
   $Specialization = $_POST["Specialization"];
   $SubSpecialization = $_POST["SubSpecialization"];
   $Schedule = $_POST["Schedule"];
+  $Secretary = $_POST["Secretary"];
   $Room = $_POST["Room"];
   $HMOAccreditation = $_POST["HMOAccreditation"];
   $TeleConsultation = $_POST["TeleConsultation"];
   $Remarks = $_POST["Remarks"];
 
-  $PrimarySecretary = $_POST["PrimarySecretary"];
-  $PrimaryFirstNumber = $_POST["PrimaryFirstNumber"];
-  $PrimaryFirstNetwork = $_POST["PrimaryFirstNetwork"];
-  $PrimarySecondNumber = $_POST["PrimarySecondNumber"];
-  $PrimarySecondNetwork = $_POST["PrimarySecondNetwork"];
-  $SecondarySecretary = $_POST["SecondarySecretary"];
-  $SecondarySecondNumber = $_POST["SecondarySecondNumber"];
-  $SecondarySecondNetwork = $_POST["SecondarySecondNetwork"];
+  $UserID = $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
 
   if ($Gender == "Male") {
     $Profile_Img = "Doctor1.png";
@@ -123,6 +124,45 @@ if (isset($_POST["InsertDoctor"])) {
       echo "No valid schedules found.";
   }
 
+
+
+  if (!empty($Secretary) && is_array($Secretary)) {
+    foreach ($Secretary as $index => $secretary) {
+        // Ensure $secretary is an array with the expected keys
+        if (
+            isset(
+                $secretary['name'],
+                $secretary['network'],
+                $secretary['number'],
+                $secretary['network2'],
+                $secretary['number2']
+            )
+        ) {
+            $InsertDoctorSecretary = $connPDO->prepare("
+                INSERT INTO `doctor_secretary` 
+                (secretary_doctor_id, doctor_secretary_first_name, doctor_secretary_first_network, doctor_secretary_first_number, doctor_secretary_second_network, doctor_secretary_second_number) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            ");
+            $InsertDoctorSecretary->execute([
+                $doctorAccountId,
+                $secretary['name'],
+                $secretary['network'],
+                $secretary['number'],
+                $secretary['network2'],
+                $secretary['number2']
+            ]);
+        } else {
+            // Echo invalid data
+            echo "Invalid secretary data at index {$index}: ";
+            echo "<pre>" . htmlspecialchars(print_r($secretary, true)) . "</pre>";
+        }
+    }
+  } else {
+      echo "Failed";
+  }
+
+
+
   if (!empty($Room) && is_array($Room)) {
     $ids = implode(",", array_map('intval', $Room));
   
@@ -167,6 +207,18 @@ if (isset($_POST["InsertDoctor"])) {
 
   $InsertRemarks = $connPDO->prepare("INSERT INTO `doctor_notes`(notes_doctor_id, doctor_notes_details) VALUES(?,?)");
   $InsertRemarks->execute([$doctorAccountId, $Remarks]);
+
+
+  $EventByID = "123";
+  $EventByName = "France";
+  $EventType = "New Account";
+  $EditDetails = "Create Account of Dr. ".$FirstName ." ". $MiddleName ." ". $LastName;
+
+  $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+  $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+
+
+
 
   echo "Doctor have been successfully inserted!";
 
@@ -1212,6 +1264,29 @@ if (isset($_POST["AddSchedule"])) {
   $arr = implode(",", $AddSchedule);
   foreach ($AddSchedule as $schedule) {
     echo "<p>" . htmlspecialchars($schedule) . "</p>";
+  }
+}
+
+
+
+// ADD SECRETARY
+if (isset($_POST["AddSecretary"])) {
+  $AddSecretary = $_POST["AddSecretary"];
+
+  foreach ($AddSecretary as $remarks) {
+      if (is_array($remarks) && isset($remarks['name'], $remarks['number'], $remarks['network'])) {
+          echo "
+          <div class='SecretaryCard'>
+              <ul>
+                  <li><h3>" . htmlspecialchars($remarks['name']) . "</h3></li>
+                  <li>" . htmlspecialchars($remarks['network']) . " - " . htmlspecialchars($remarks['number']) . "</li>
+                  <li>" . htmlspecialchars($remarks['network2']) . " - " . htmlspecialchars($remarks['number2']) . "</li>
+              </ul>
+          </div>
+          ";
+      } else {
+          echo "<p>Invalid secretary data.</p>";
+      }
   }
 }
 
