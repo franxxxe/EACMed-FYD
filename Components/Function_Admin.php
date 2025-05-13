@@ -256,6 +256,10 @@ if (isset($_POST["ViewAdmin_ID"])) {
   }
   if ($AdminFetchQuery->num_rows > 0) {
     while ($row1 = mysqli_fetch_assoc($AdminFetchQuery)) {
+      $Admin_Timestamp = strtotime($row1['account_created_timestamp']); 
+      $Admin_DateTime = date('M-d-Y h:i:s A', $Admin_Timestamp);
+
+
       echo " 
             <div class='Modal-Sidebar-Top'>
               <i class='fa-solid fa-user-tie'></i>
@@ -278,17 +282,17 @@ if (isset($_POST["ViewAdmin_ID"])) {
 
                 <div class='InputFieldForm'>
                   <i class='InputFieldForm-i'>Created on</i>
-                  <div class='InputFieldForm-Info'> <span> " . $row1['account_created_timestamp'] . " </span> </div>
+                  <div class='InputFieldForm-Info'> <span> " . $Admin_DateTime . " </span> </div>
                 </div>
 
-                <div class='InputFieldForm'>
+               <!-- <div class='InputFieldForm'>
                   <i class='InputFieldForm-i'>Last edited on</i>
                   <div class='InputFieldForm-Info'> 
                     <span> " . $row1['account_created_timestamp'] . " </span> 
                     <br>
                     <span> (by a Super Admin) </span>
                   </div>
-                </div>
+                </div> -->
 
                 
                 <!-- <div class='InputFieldForm'>
@@ -307,6 +311,83 @@ if (isset($_POST["ViewAdmin_ID"])) {
     echo "No Data Found";
   }
 }
+
+// VIEW ACTIVITY LOGS 
+
+if (isset($_POST["ViewActivityLogs_ID"])) {
+  global $connMysqli;
+  $ActivityLogs_ID = $_POST["ViewActivityLogs_ID"];
+
+  $ActivityLogsFetchQuery = "SELECT * from admin_activity_logs
+  INNER JOIN admin_accounts ON activity_logs_admin_id = admin_id
+  WHERE admin_activity_logs_id = '$ActivityLogs_ID'";
+  $ActivityLogsFetchQuery = mysqli_query($connMysqli, $ActivityLogsFetchQuery);
+
+  if (!$ActivityLogsFetchQuery) {
+    die('MySQL ErrorL ' . mysqli_error($conn));
+  }
+  if ($ActivityLogsFetchQuery->num_rows > 0) {
+    while ($row1 = mysqli_fetch_assoc($ActivityLogsFetchQuery)) {
+      $ActivityLogs_Timestamp = strtotime($row1['time_stamp']); 
+      $ActivityLogs_DateTime = date('M-d-Y h:i:s A', $ActivityLogs_Timestamp);
+
+      echo " 
+            <div class='Modal-Sidebar-Top'>
+              <i class='fa-solid fa-clock-rotate-left'></i>
+              <h4>View Activity Log</h4>
+            </div>
+            <div class='Modal-Sidebar-Main'>
+              <div class='ModalSidebar-Container AddDoctorDivContainer-Form'>
+
+           <!-- <div class='Div-Container1'>
+              <div class='Doctor-Img-Profile'><img src='../Uploaded/Doctor1.png' alt=''></div>
+                  <div class=''>
+                    <p>" . $row1['admin_username'] . "</p>
+                    <div class='Doctor-Active Doctor-Capitalize'><i class='fa-solid fa-circle'></i><span>" . $row1['admin_status'] . "</span></div>
+                  </div>
+                </div> -->
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Event By:</i>
+                  <div class='InputFieldForm-Info'> <span> " . $row1['admin_username'] . " </span> </div>
+                </div>
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Event Date/Time:</i>
+                  <div class='InputFieldForm-Info'> <span> " . $ActivityLogs_DateTime . " </span> </div>
+                </div>
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Event Type:</i>
+                  <div class='InputFieldForm-Info'> <span> " . $row1['event_type'] . " </span> </div>
+                </div>
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Event Details:</i>
+                  <div class='InputFieldForm-Info'> <span> " . $row1['edit_details'] . " </span> </div>
+                </div>
+
+                <!-- <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Remarks:</i>
+
+                  <div class='InformationField'></div>
+                </div> -->
+              </div>
+            </div>
+            <!-- <div class='Modal-Sidebar-Bottom'>
+              <button class='Btn_1' onclick='EditAdmin(" . $row1['admin_id'] . ")'>Edit</button>
+              <button class='Btn_2' onclick='ResetPasswordAdmin(" . $row1['admin_id'] . ")'>Reset Password</button>
+            </div> -->";
+    };
+  } else {
+    echo "No Data Found";
+  }
+}
+
+
+
+
+
 
 
 //PROMPT - RESET PASSWORD - ADMIN (FUNCTION)
@@ -400,7 +481,7 @@ if (isset($_POST["ViewDoctorType"])) {
         echo " 
           <div class='Modal-Sidebar-Top'>
             <i class='fa-solid fa-user-doctor'></i>
-            <h4>Doctor Information</h4>
+            <h4>View Doctor Information</h4>
           </div>
           <div class='Modal-Sidebar-Main'>
             <div class='ModalSidebar-Container AddDoctorDivContainer-Form'>
@@ -1351,8 +1432,8 @@ if (isset($_POST["UpdateDoctorType"])) {
   if($UpdateDoctorType == "Delete"){
     $query = "UPDATE doctor SET doctor_archive_status = 'HIDDEN' WHERE doctor_account_id  = '$DoctorID'";
     mysqli_query($connMysqli, $query);
-    $EventType = "Remove Account";
-    $EditDetails = "Remove Account of Dr. ".$DocFullName;
+    $EventType = "Remove Doctor";
+    $EditDetails = "Removed Doctor: Dr. ".$DocFullName;
     // echo "Account Deactivated.";
 
   }
@@ -1360,8 +1441,12 @@ if (isset($_POST["UpdateDoctorType"])) {
   elseif($UpdateDoctorType == "Restore"){
     $query = "UPDATE doctor SET doctor_archive_status = 'VISIBLE' WHERE doctor_account_id  = '$DoctorID'";
     mysqli_query($connMysqli, $query);
-    $EventType = "Restore Account";
-    $EditDetails = "Restore Account of Dr. ".$DocFullName;
+
+    $query = "UPDATE doctor SET doctor_status = 'ACTIVE' WHERE doctor_account_id  = '$DoctorID'";
+    mysqli_query($connMysqli, $query);
+    
+    $EventType = "Restore Doctor";
+    $EditDetails = "Restored: ".$DocFullName;
     // echo "Account Restored.";
   }
 
@@ -1381,8 +1466,9 @@ if (isset($_POST["UpdateDoctorType"])) {
     doctor_category = '$EditCategory'
     WHERE doctor_account_id  = '$DoctorID'";
     mysqli_query($connMysqli, $query);
-    $EventType = "Update Account";
-    $EditDetails = "Update Account of Dr. ".$DocFullName;
+
+    $EventType = "Update Doctor";
+    $EditDetails = "Updated Doctor Information of Dr. ".$DocFullName;
     echo "Account Updated.";
   }
   $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");

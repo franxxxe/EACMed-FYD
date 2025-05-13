@@ -400,9 +400,12 @@
                 </thead>
                 <tbody class="tbody-doctor">
                   <?php
-                  $FetchDoctor = "SELECT DISTINCT * FROM doctor WHERE doctor_archive_status = 'VISIBLE' ORDER BY doctor_id DESC";
+                  $FetchDoctor = "SELECT DISTINCT * FROM doctor WHERE doctor_archive_status = 'VISIBLE' AND doctor_status = 'ACTIVE' ORDER BY doctor_id DESC";
                   $FetchDoctor = mysqli_query($connMysqli, $FetchDoctor);
                   while ($row = mysqli_fetch_assoc($FetchDoctor)) {
+                    $Status = $row['doctor_status'];
+                    $StatusColor = ($Status == 'ACTIVE') ? '#326932' : '#FF0000';
+
                     $docId = $row['doctor_account_id'];
                     $CountDoctorHMO = mysqli_query($connMysqli, "SELECT * FROM doctor_hmo WHERE hmo_doctor_id = '$docId'");
                     $CountDoctorHMO = mysqli_num_rows($CountDoctorHMO);
@@ -419,7 +422,7 @@
                            echo "
                         </td>
                         <td class='TCenter'>$CountDoctorHMO</td>
-                        <td class='TCenter'>".$row['doctor_status']." </td>
+                        <td class='TCenter' style='color: ". $StatusColor ."; font-weight: bold;'>". $Status ." </td>
                         <td><div class='td-div'><button class='Btn_1' onclick='ViewDoctor(`View`,`".$row['doctor_account_id']."`)'><i class='fa-regular fa-eye'></i>View</button></div></td>
                       </tr>
                     ";
@@ -530,7 +533,7 @@
                           <td>".$row['event_type']."</td>
                           <td>".$row['edit_details']."</td>
                           <!-- <td>".$row['admin_username']."</td> -->
-                          <td><button class='Btn_1' onclick='ViewAdmin()'><i class='fa-regular fa-eye'></i> View</button></td>
+                          <td><button class='Btn_1' onclick='View_ActivityLogs(`".$row['admin_activity_logs_id']."`)' <i class='fa-regular fa-eye'></i> View</button></td>
                         </tr>
                       ";
                   }; ?>
@@ -570,14 +573,17 @@
 
                 <tbody class="tbody-archived">
                   <?php
-                  $FetchDoctor = "SELECT DISTINCT * FROM doctor WHERE doctor_archive_status = 'HIDDEN' ORDER BY doctor_id DESC";
+                  $FetchDoctor = "SELECT DISTINCT * FROM doctor WHERE doctor_archive_status = 'HIDDEN' AND doctor_status = 'INACTIVE' ORDER BY doctor_id DESC";
                   $FetchDoctor = mysqli_query($connMysqli, $FetchDoctor);
                   while ($row = mysqli_fetch_assoc($FetchDoctor)) {
+                    $Status = $row['doctor_status'];
+                    $StatusColor = ($AdminStatus == 'ACTIVE') ? '#326932' : '#FF0000';
+
                     echo "
                       <tr class='tr-archived'>
                         <td class='TCenter'>".$row['doctor_account_id']." </td>
                         <td class='capitalize'>" . $row['doctor_lastname'] . ", " . $row['doctor_firstname'] . " " . substr($row['doctor_middlename'], 0, 1) . ".</td>
-                        <td class='TCenter'>".$row['doctor_status']." </td>
+                        <td class='TCenter' style='color:". $StatusColor ."; font-weight: bold; '>". $Status ." </td>
                         <td >
                           <div class='td-div'>
                             <button class='Btn_1' onclick='ViewDoctor(`ArchivedView`,`".$row['doctor_account_id']."`)'><i class='fa-regular fa-eye'></i>View</button>
@@ -915,7 +921,7 @@
                   <div class="AddDoctorDivContainer-Form">
                     <!-- <h4>Username</h4> -->
                     <div class="InputFieldForm">
-                      <i>Username</i>
+                      <i class='InputFieldForm-i'>Username</i>
                       <input type="text" placeholder="Username" id="AccessUsername">
                     </div>
                     <div class="InputFieldForm">
@@ -940,6 +946,13 @@
                 <!-- Function -->
               </div>
             <!-- End -->
+
+            <!-- View Activity Logs --> 
+              <div class="Modal-DivDoctor Modal-ViewActivityLogs D1">
+                <!-- Function --> 
+              </div>
+            <!-- End --> 
+
           </div>
         </div>
       </section>

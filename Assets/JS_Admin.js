@@ -482,7 +482,7 @@ function Yes_AddNewAccess(AccessAccount) {
     success: function (response) {
       // console.log(response);
       reloadDiv('account_table')
-      $("#Pop-Message").html("New Admin have been successfully added!");
+      $("#Pop-Message").html("The new admin account has been successfully created!");
     },
   });
 }
@@ -964,6 +964,7 @@ function UpdateDoctorDB(UpdateType, DoctorID){
       $(".tbody-doctor").load(location.href + " .tr-doctor");
       $(".tbody-archived").load(location.href + " .tr-archived");
       reloadDiv('UpdateDiv');
+      $("#Pop-Message").html("Restored successfully!");
     },
   });
 }
@@ -985,5 +986,33 @@ function reloadDiv(UpdateDiv){
 
   // console.log(UpdateDiv);
   // $("#DIV").load(location.href + " #DashCount-7");
+}
+
+
+
+
+
+
+
+// VIEW ACTIVITY LOGS SIDEBAR
+
+function View_ActivityLogs(ViewActivityLogs_ID) {
+  $(".Modal-Sidebar").css("display", "flex");
+  $(".Modal-ViewActivityLogs").css("display", "flex");
+  $(".Modal-Container").css("display", "flex");
+  $(".Modal-ViewActivityLogs").siblings().css("display", "none");
+
+  var data = {
+    ViewActivityLogs_ID: ViewActivityLogs_ID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      $(".Modal-ViewActivityLogs").html(response);
+      // console.log(response);
+    },
+  });
 }
 
