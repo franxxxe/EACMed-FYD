@@ -173,6 +173,10 @@
 .AccountsDiv,
 .ActivityLogs,
 .ArchivesDiv,
+.HMO_Div,
+.Room_Div,
+.Specialization_Div,
+.SubSpecialization_Div,
 .DoctorsViewPanel {
   display: none;
 }

@@ -38,6 +38,34 @@ function BTNArchive() {
   $(".SBFocus5").siblings().removeClass("Sidebar_Active");
   $(".SBFocus5").addClass("Sidebar_Active");
 }
+function BTN_HMO(){
+  $(".HMO_Div").css("display", "flex");
+  $(".HMO_Div").siblings().css("display", "none");
+
+  $(".SBFocus6").siblings().removeClass("Sidebar_Active");
+  $(".SBFocus6").addClass("Sidebar_Active");
+}
+function BTN_Room(){
+  $(".Room_Div").css("display", "flex");
+  $(".Room_Div").siblings().css("display", "none");
+
+  $(".SBFocus7").siblings().removeClass("Sidebar_Active");
+  $(".SBFocus7").addClass("Sidebar_Active");
+}
+function BTN_Specialization(){
+  $(".Specialization_Div").css("display", "flex");
+  $(".Specialization_Div").siblings().css("display", "none");
+
+  $(".SBFocus8").siblings().removeClass("Sidebar_Active");
+  $(".SBFocus8").addClass("Sidebar_Active");
+}
+function BTN_SubSpecialization(){
+  $(".SubSpecialization_Div").css("display", "flex");
+  $(".SubSpecialization_Div").siblings().css("display", "none");
+
+  $(".SBFocus9").siblings().removeClass("Sidebar_Active");
+  $(".SBFocus9").addClass("Sidebar_Active");
+}
 
 function clearText() {
   $(".CT1").val("");

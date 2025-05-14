@@ -93,6 +93,10 @@
             <li class="Sidebar_Focus SBFocus2 " onclick="BTNDoctors()"> <i class="fa-solid fa-user-doctor"></i> Doctors</li>
 
             <?php if (mysqli_num_rows($ACCESS) > 0) { ?>
+              <li class="Sidebar_Focus SBFocus6 " onclick="BTN_HMO()"> <i class="fa-solid fa-notes-medical"></i> HMO </li>
+              <li class="Sidebar_Focus SBFocus7 " onclick="BTN_Room()"> <i class="fa-solid fa-door-closed"></i> Room </li>
+              <li class="Sidebar_Focus SBFocus8 " onclick="BTN_Specialization()"> <i class="fa-solid fa-stethoscope"></i> Specialization </li>
+              <li class="Sidebar_Focus SBFocus9 " onclick="BTN_SubSpecialization()"> <i class="fa-solid fa-stethoscope"></i> Sub-Specialization </li>
               <li class="Sidebar_Focus SBFocus3 " onclick="BTNAccounts()"> <i class="fa-solid fa-user-tie"></i> Accounts</li>
               <li class="Sidebar_Focus SBFocus4 " onclick="BTNActivity()"> <i class="fa-regular fa-rectangle-list"></i> Activity Logs</li>
               <li class="Sidebar_Focus SBFocus5 " onclick="BTNArchive()"> <i class="fa-solid fa-file-zipper"></i> Archived Doctors</li>
@@ -601,6 +605,218 @@
           </div>
         </div>
       <!-- END -->
+
+      <!-- HMO -->
+        <div class="HMO_Div AdminMainDiv">
+          <div class="MainDiv-Header">
+            <div class="">
+              <h4>Manage HMO</h4>
+            </div>
+
+            <div class="MainDiv-Header-Right">
+              <button class="Btn_1" onclick=""><i class="fa-solid fa-plus"></i> Add HMO</button>
+              <div class="InputText3">
+                <input type="text" placeholder="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </div>
+            </div>
+          </div>
+          <div class="MainDiv-Main DoctorsDiv-Main">
+            <div class="Table-Div">
+              <table>
+                <thead>
+                  <tr class="Tr-Header">
+                    <th>ID</th>
+                    <th>HMO Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody class="tbody-archived">
+                  <?php
+                  $FetchHMO = "SELECT * from hmo";
+                  $FetchHMO = mysqli_query($connMysqli, $FetchHMO);
+                  while ($row = mysqli_fetch_assoc($FetchHMO)) {
+                    echo "
+                      <tr class='tr-archived'>
+                        <td class='TCenter'>".$row['hmo_id']." </td>
+                        <td class='TCenter'>" . $row['hmo_name'] . " </td>
+                        <td> 
+                            <div class='td-div'>
+                            <button class='Btn_1' onclick='EditHMO(`ArchivedView`,`".$row['hmo_id']."`)'><i class='fa-regular fa-eye'></i>Edit</button>
+                            <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ";
+                  }; ?>
+
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+        </div>
+      <!-- END -->
+
+      <!-- Room -->
+       <div class="Room_Div AdminMainDiv">
+          <div class="MainDiv-Header">
+            <div class="">
+              <h4>Manage Room/s</h4>
+            </div>
+
+            <div class="MainDiv-Header-Right">
+              <button class="Btn_1" onclick=""><i class="fa-solid fa-plus"></i> Add Room</button>
+              <div class="InputText3">
+                <input type="text" placeholder="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </div>
+            </div>
+          </div>
+          <div class="MainDiv-Main DoctorsDiv-Main">
+            <div class="Table-Div">
+              <table>
+                <thead>
+                  <tr class="Tr-Header">
+                    <th>ID</th>
+                    <th>Room Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody class="tbody-archived">
+                  <?php
+                  $FetchRoom = "SELECT * from room";
+                  $FetchRoom = mysqli_query($connMysqli, $FetchRoom);
+                  while ($row = mysqli_fetch_assoc($FetchRoom)) {
+                    echo "
+                      <tr class='tr-archived'>
+                        <td class='TCenter'>".$row['room_id']." </td>
+                        <td class='TCenter'>" . $row['room_floor_name'] . " </td>
+                        <td> 
+                            <div class='td-div'>
+                            <button class='Btn_1' onclick='EditHMO(`ArchivedView`,`".$row['room_id']."`)'><i class='fa-regular fa-eye'></i>Edit</button>
+                            <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ";
+                  }; ?>
+
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+        </div>
+      <!-- END -->
+
+      <!-- Specialization -->
+       <div class="Specialization_Div AdminMainDiv">
+          <div class="MainDiv-Header">
+            <div class="">
+              <h4>Manage Specialization/s</h4>
+            </div>
+
+            <div class="MainDiv-Header-Right">
+              <button class="Btn_1" onclick=""><i class="fa-solid fa-plus"></i> Add Specialization</button>
+              <div class="InputText3">
+                <input type="text" placeholder="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </div>
+            </div>
+          </div>
+          <div class="MainDiv-Main DoctorsDiv-Main">
+            <div class="Table-Div">
+              <table>
+                <thead>
+                  <tr class="Tr-Header">
+                    <th>ID</th>
+                    <th>Specialization Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody class="tbody-archived">
+                  <?php
+                  $FetchSpecialization = "SELECT * from specialization";
+                  $FetchSpecialization = mysqli_query($connMysqli, $FetchSpecialization);
+                  while ($row = mysqli_fetch_assoc($FetchSpecialization)) {
+                    echo "
+                      <tr class='tr-archived'>
+                        <td class='TCenter'>".$row['specialization_id']." </td>
+                        <td class='TCenter'>" . $row['specialization_name'] . " </td>
+                        <td> 
+                            <div class='td-div'>
+                            <button class='Btn_1' onclick='EditHMO(`ArchivedView`,`".$row['specialization_id']."`)'><i class='fa-regular fa-eye'></i>Edit</button>
+                            <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ";
+                  }; ?>
+
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+        </div>
+      <!-- END -->
+
+      <!-- Sub-specialization -->
+       <div class="SubSpecialization_Div AdminMainDiv">
+          <div class="MainDiv-Header">
+            <div class="">
+              <h4>Manage Sub-Specialization/s</h4>
+            </div>
+
+            <div class="MainDiv-Header-Right">
+              <button class="Btn_1" onclick=""><i class="fa-solid fa-plus"></i> Add Sub-specialization</button>
+              <div class="InputText3">
+                <input type="text" placeholder="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </div>
+            </div>
+          </div>
+          <div class="MainDiv-Main DoctorsDiv-Main">
+            <div class="Table-Div">
+              <table>
+                <thead>
+                  <tr class="Tr-Header">
+                    <th>ID</th>
+                    <th>Specialization Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody class="tbody-archived">
+                  <?php
+                  $FetchSubSpecialization = "SELECT * from sub_specialization";
+                  $FetchSubSpecialization = mysqli_query($connMysqli, $FetchSubSpecialization);
+                  while ($row = mysqli_fetch_assoc($FetchSubSpecialization)) {
+                    echo "
+                      <tr class='tr-archived'>
+                        <td class='TCenter'>".$row['sub_specialization_id']." </td>
+                        <td class='TCenter'>" . $row['sub_specialization_name'] . " </td>
+                        <td> 
+                            <div class='td-div'>
+                            <button class='Btn_1' onclick='EditHMO(`ArchivedView`,`".$row['sub_specialization_id']."`)'><i class='fa-regular fa-eye'></i>Edit</button>
+                            <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ";
+                  }; ?>
+
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+        </div> 
+      <!-- END --> 
     </section>
     <!-- END -->
 
