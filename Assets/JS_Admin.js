@@ -1044,3 +1044,78 @@ function View_ActivityLogs(ViewActivityLogs_ID) {
   });
 }
 
+
+
+
+
+//Additional CRUD for HMO, Room, Specialization, Sub-specialization 
+
+//HMO 
+//ADD HMO MODAL 
+function AddHMO() {
+  $(".Modal-Sidebar").css("display", "flex");
+  $(".Modal-AddHMO").css("display", "flex");
+  $(".Modal-AddHMO").siblings().css("display", "none");
+  $(".Modal-Container").css("display", "flex");
+}
+
+//ADD HMO PROMPT 
+function AddNewHMO() {
+  $(".Prompt-Message").css("display", "flex");
+  $(".Prompt-AddHMO").css("display", "flex");
+  $(".Prompt-AddHMO").siblings().css("display", "none");
+}
+
+//IF YES ADD HMO 
+function Yes_AddHMO(AddHMO) {
+  PopMessages();
+  var data = {
+    AddHMO: AddHMO,
+    HMOName: $("#HMOName").val(),
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      // console.log(response);
+      $("#Pop-Message").html("The data has successfully added!");
+    },
+  });
+}
+
+
+//ROOM
+//ADD ROOM MODAL 
+function AddRoom() {
+  $(".Modal-Sidebar").css("display", "flex");
+  $(".Modal-Room").css("display", "flex");
+  $(".Modal-Room").siblings().css("display", "none");
+  $(".Modal-Container").css("display", "flex");
+}
+
+//ADD HMO PROMPT 
+function AddNewRoom() {
+  $(".Prompt-Message").css("display", "flex");
+  $(".Prompt-AddRoom").css("display", "flex");
+  $(".Prompt-AddRoom").siblings().css("display", "none");
+}
+
+//IF YES ADD HMO 
+function Yes_AddRoom(AddRoom) {
+  PopMessages();
+  var data = {
+    AddRoom: AddRoom,
+    FloorLevel: $("#FloorLevel").val(),
+    RoomNumber: $("#RoomNumber").val(),
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      // console.log(response);
+      $("#Pop-Message").html("The data has successfully added!");
+    },
+  });
+}

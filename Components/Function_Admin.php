@@ -1206,8 +1206,8 @@ if (isset($_POST["AddItemsItemType"])) {
         <div class='Add-Items-Content'>
           <div class='AddItemsForm'>
             <div class='Add-Items-Div'>
-              <label for='AddName'>Specialization Name</label>
-              <input type='text' id='InsertDataSpecsName' onkeyup='SearchAddSpecs(`InsertDataSpecsName`)'>
+              <!-- <label for='AddName'>Specialization Name</label> -->
+              <!-- <input type='text' id='InsertDataSpecsName' onkeyup='SearchAddSpecs(`InsertDataSpecsName`)'> -->
               <input type='hidden' id='InsertDataID'>
 
               <div class='Add-Items-List'>
@@ -1475,6 +1475,30 @@ if (isset($_POST["UpdateDoctorType"])) {
   $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
 }
 
+
+
+//ADD HMO 
+if (isset($_POST["AddHMO"])) {
+  $HMOName = $_POST["HMOName"];
+
+  $query = $connPDO->prepare("INSERT INTO `hmo`(hmo_name) VALUES(?)");
+  $query->execute([$HMOName]); 
+
+}
+
+
+
+
+//ADD ROOM 
+if (isset($_POST["AddRoom"])) {
+  $FloorLevel = $_POST["FloorLevel"];
+  $RoomNumber = $_POST["RoomNumber"];
+
+  $Room = $FloorLevel . ' - ' . $RoomNumber;
+
+  $query = $connPDO->prepare("INSERT INTO `room`(room_floor_name) VALUES(?)");
+  $query->execute([$Room]);
+}
 
 
 

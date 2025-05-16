@@ -556,7 +556,6 @@
             </div>
 
             <div class="MainDiv-Header-Right">
-              <!-- <button class="Btn_1" onclick="AddAdmin()"><i class="fa-solid fa-plus"></i> Add Admin</button> -->
               <div class="InputText3">
                 <input type="text" placeholder="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -614,7 +613,7 @@
             </div>
 
             <div class="MainDiv-Header-Right">
-              <button class="Btn_1" onclick=""><i class="fa-solid fa-plus"></i> Add HMO</button>
+              <button class="Btn_1" onclick="AddItems('HMO')"><i class="fa-solid fa-plus"></i> Add HMO</button>
               <div class="InputText3">
                 <input type="text" placeholder="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -667,7 +666,7 @@
             </div>
 
             <div class="MainDiv-Header-Right">
-              <button class="Btn_1" onclick=""><i class="fa-solid fa-plus"></i> Add Room</button>
+              <button class="Btn_1" onclick="AddItems('Room')"><i class="fa-solid fa-plus"></i> Add Room</button>
               <div class="InputText3">
                 <input type="text" placeholder="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -720,7 +719,7 @@
             </div>
 
             <div class="MainDiv-Header-Right">
-              <button class="Btn_1" onclick=""><i class="fa-solid fa-plus"></i> Add Specialization</button>
+              <button class="Btn_1" onclick="AddItems('Specs')"><i class="fa-solid fa-plus"></i> Add Specialization</button>
               <div class="InputText3">
                 <input type="text" placeholder="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -773,7 +772,7 @@
             </div>
 
             <div class="MainDiv-Header-Right">
-              <button class="Btn_1" onclick=""><i class="fa-solid fa-plus"></i> Add Sub-specialization</button>
+              <button class="Btn_1" onclick="AddItems('SubSpecs')"><i class="fa-solid fa-plus"></i> Add Sub-specialization</button>
               <div class="InputText3">
                 <input type="text" placeholder="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -1169,6 +1168,60 @@
               </div>
             <!-- End --> 
 
+            <!-- Add HMO --> 
+             <div class="Modal-DivDoctor Modal-AddHMO D1">
+                <div class="Modal-Sidebar-Top">
+                  <i class="fa-solid fa-notes-medical"></i>
+                  <h4>Add HMO</h4>
+                </div>
+                <div class="Modal-Sidebar-Main Modal-Not-Capitalize">
+                  <div class="AddDoctorDivContainer-Form">
+                    <!-- <h4>Username</h4> -->
+                    <div class="InputFieldForm">
+                      <i class='InputFieldForm-i'>HMO Name</i>
+                      <input type="text" placeholder="HMO Name" id="HMOName">
+                    </div>
+                  </div>
+                </div>
+                <div class="Modal-Sidebar-Bottom">
+                  <button class="Btn_1" onclick="AddNewHMO()">Add</button>
+                  <button class="Btn_2" onclick="ModalSidebarExit()">Cancel</button>
+                </div>
+              </div>
+            <!-- END --> 
+
+            <!-- Add Room -->
+             <div class="Modal-DivDoctor Modal-Room D1">
+                <div class="Modal-Sidebar-Top">
+                  <i class="fa-solid fa-notes-medical"></i>
+                  <h4>Add Room</h4>
+                </div>
+                <div class="Modal-Sidebar-Main Modal-Not-Capitalize">
+                  <div class="AddDoctorDivContainer-Form">
+                    <!-- <h4>Username</h4> -->
+                    <div class="InputFieldForm">
+                      <i class='InputFieldForm-i'>Floor Level</i>
+                      <input type="text" placeholder="(ex. 1st Floor)" id="FloorLevel">
+                    </div>
+                    <div class="InputFieldForm">
+                      <i class='InputFieldForm-i'>Room Number</i>
+                      <input type="number" placeholder="(ex. 1311)" id="RoomNumber">
+                    </div>
+                  </div>
+                </div>
+                <div class="Modal-Sidebar-Bottom">
+                  <button class="Btn_1" onclick="AddNewRoom()">Add</button>
+                  <button class="Btn_2" onclick="ModalSidebarExit()">Cancel</button>
+                </div>
+              </div>
+            <!-- END --> 
+
+            <!-- Add Specialization --> 
+            <!-- END --> 
+
+            <!-- Add Sub-specialization --> 
+            <!-- END --> 
+
           </div>
         </div>
       </section>
@@ -1257,6 +1310,38 @@
           <div class="Prompt-Div Prompt-ResetAdminAccount">
             <!-- FUNCTION -->
           </div>
+
+          <!-- Add HMO - Prompt --> 
+          <div class="Prompt-Div Prompt-AddHMO">
+            <div class="Prompt-Message-Top">
+              <lord-icon src="https://cdn.lordicon.com/ygvjgdmk.json" trigger="loop" delay="1500" class="lord-icon"></lord-icon>
+              <h4>Are you sure?</h4>
+            </div>
+            <div class="Prompt-Message-Center">
+              <p class="P-Message">Are you sure you want to add this HMO?</p>
+            </div>
+            <div class="Prompt-Message-Bottom">
+              <button class="Btn_1" onclick="Yes_AddHMO('AddHMO')">Yes</button>
+              <button class="Btn_2" onclick="HidePromptMessage()">No</button>
+            </div>
+          </div>
+          <!-- END --> 
+
+          <!-- Add Room - Prompt -->
+          <div class="Prompt-Div Prompt-AddRoom">
+            <div class="Prompt-Message-Top">
+              <lord-icon src="https://cdn.lordicon.com/ygvjgdmk.json" trigger="loop" delay="1500" class="lord-icon"></lord-icon>
+              <h4>Are you sure?</h4>
+            </div>
+            <div class="Prompt-Message-Center">
+              <p class="P-Message">Are you sure you want to add this data?</p>
+            </div>
+            <div class="Prompt-Message-Bottom">
+              <button class="Btn_1" onclick="Yes_AddRoom('AddHMO')">Yes</button>
+              <button class="Btn_2" onclick="HidePromptMessage()">No</button>
+            </div>
+          </div>
+          <!-- END --> 
 
         </div>
       </section>
