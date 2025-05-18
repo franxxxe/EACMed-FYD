@@ -1480,9 +1480,17 @@ if (isset($_POST["UpdateDoctorType"])) {
 //ADD HMO 
 if (isset($_POST["AddHMO"])) {
   $HMOName = $_POST["HMOName"];
+  $UserID =  $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
 
   $query = $connPDO->prepare("INSERT INTO `hmo`(hmo_name) VALUES(?)");
   $query->execute([$HMOName]); 
+
+  $EventType = "Added Data"; 
+  $EditDetails = 'Added HMO (HMO Name: '. $HMOName .')';
+
+  $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+  $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
 
 }
 
@@ -1531,7 +1539,6 @@ if (isset($_POST["EditHMO_ID"])) {
 }
 
 //IF YES EDIT HMO 
-
 if (isset($_POST["Yes_EditHMO"])) { 
   global $connMysqli;
 
@@ -1554,7 +1561,7 @@ if (isset($_POST["Yes_EditHMO"])) {
       mysqli_query($connMysqli, $query);
 
       $EventType = "Update Data"; 
-      $EditDetails = 'Edited HMO (Field: HMO Name, Before: ' . $LastHMOName . ', After: ' . $NewHMOName . ')';
+      $EditDetails = 'Updated HMO Name (Before: ' . $LastHMOName . ', After: ' . $NewHMOName . ')';
 
       $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
       $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);

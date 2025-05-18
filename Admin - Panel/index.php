@@ -1017,7 +1017,7 @@
                     <div class='InputFieldForm'>
                       <div class='InputFieldFormChild1'>
                         <i class='InputFieldForm-i'>HMO Accreditation:</i>
-                        <button class='Btn_1' onclick="AddHmo()">Add HMO</button>
+                        <button class='Btn_1' onclick="AddItems('HMO')">Add HMO</button>
                       </div>
                       <div class='searchContainer-Parent'>
                         <div class='inputFlex'>

@@ -1072,6 +1072,7 @@ function Yes_AddHMO(AddHMO) {
   var data = {
     AddHMO: AddHMO,
     HMOName: $("#HMOName").val(),
+    UserID: UserID,
   };
   $.ajax({
     url: "../Components/Function_Admin.php",
@@ -1131,7 +1132,7 @@ function Yes_EditHMO(Yes_EditHMO) {
     data: data,
     success: function (response) {
       console.log(response);
-      $("#Pop-Message").html("The data has successfully added!");
+      $("#Pop-Message").html("The data has successfully updated!");
     },
   });
 }
@@ -1161,6 +1162,7 @@ function Yes_AddRoom(AddRoom) {
     AddRoom: AddRoom,
     FloorLevel: $("#FloorLevel").val(),
     RoomNumber: $("#RoomNumber").val(),
+    UserID: UserID,
   };
   $.ajax({
     url: "../Components/Function_Admin.php",
