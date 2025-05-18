@@ -1486,7 +1486,82 @@ if (isset($_POST["AddHMO"])) {
 
 }
 
+//EDIT HMO 
+if (isset($_POST["EditHMO_ID"])) {
+  global $connMysqli;
+  $HMO_ID = $_POST["EditHMO_ID"];
 
+  $FetchQuery = "SELECT * from hmo
+  WHERE hmo_id = '$HMO_ID'";
+  $FetchQuery = mysqli_query($connMysqli, $FetchQuery);
+
+  if (!$FetchQuery) {
+    die('MySQL ErrorL ' . mysqli_error($conn));
+  }
+  if ($FetchQuery->num_rows > 0) {
+    while ($row1 = mysqli_fetch_assoc($FetchQuery)) {
+      echo " 
+            <div class='Modal-Sidebar-Top'>
+              <i class='fa-solid fa-user-tie'></i>
+              <h4>Edit HMO</h4>
+            </div>
+            <div class='Modal-Sidebar-Main'>
+              <div class='ModalSidebar-Container AddDoctorDivContainer-Form'>
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Current HMO Name</i>
+                  <div class='InputFieldForm-Info'> <span> " . $row1['hmo_name'] . " </span> </div>
+                </div>
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>New HMO Name: </i>
+                  <input type='text' id='EditHMOName' placeholder='".$row1['hmo_name']."' value=''>
+                </div>
+
+              </div>
+            </div>
+            <div class='Modal-Sidebar-Bottom'>
+              <button class='Btn_1' onclick='PromptHMO(" . $row1['hmo_id'] . ")'>Edit</button>
+              <button class='Btn_2' onclick='ModalSidebarExit()'>Cancel</button>
+            </div> ";
+    };
+  } else {
+    echo "No Data Found";
+  }
+
+}
+
+//IF YES EDIT HMO 
+
+if (isset($_POST["Yes_EditHMO"])) { 
+  global $connMysqli;
+
+  $EditedHMO_ID = $_POST["Yes_EditHMO"]; 
+  $NewHMOName = $_POST["NewHMOName"];
+
+  $UserID = $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
+
+  //Fetching previous data before updating 
+  $LastUpdateQuery = "SELECT hmo_name from hmo
+  WHERE hmo_id = '$EditedHMO_ID'";
+  $LastUpdateQuery = mysqli_query($connMysqli, $LastUpdateQuery);
+
+    if($LastUpdateQuery->num_rows > 0) {
+      while($row = mysqli_fetch_assoc($LastUpdateQuery)) {
+      $LastHMOName = $row['hmo_name'];
+
+      $query = "UPDATE hmo SET hmo_name = '$NewHMOName' WHERE hmo_id = '$EditedHMO_ID'";
+      mysqli_query($connMysqli, $query);
+
+      $EventType = "Update Data"; 
+      $EditDetails = 'Edited HMO (Field: HMO Name, Before: ' . $LastHMOName . ', After: ' . $NewHMOName . ')';
+
+      $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+      $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+    }
+  }
+
+}
 
 
 //ADD ROOM 

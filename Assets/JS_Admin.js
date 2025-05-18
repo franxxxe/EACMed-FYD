@@ -1084,6 +1084,59 @@ function Yes_AddHMO(AddHMO) {
   });
 }
 
+//EDIT HMO - FUNCTION 
+function EditHMO(EditHMO_ID) {
+  $(".Modal-Sidebar").css("display", "flex");
+  $(".Modal-EditHMO").css("display", "flex");
+  $(".Modal-EditHMO").siblings().css("display", "none");
+
+  selectedID = EditHMO_ID;
+
+  var data = {
+    EditHMO_ID: EditHMO_ID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      // console.log(response);
+      $(".Modal-EditHMO").html(response);
+    },
+  });
+}
+
+//IF YES EDIT HMO 
+let HMO_ID = '';
+function PromptHMO(PromptHMO_ID) {
+  $(".Prompt-Message").css("display", "flex");
+  $(".Prompt-EditHMO").css("display", "flex");
+  $(".Prompt-EditHMO").siblings().css("display", "none");
+  HMO_ID = PromptHMO_ID; 
+  // console.log(HMO_ID);
+}
+
+function Yes_EditHMO(Yes_EditHMO) {
+  var NewHMOName = $("#EditHMOName").val();
+
+  PopMessages();
+  var data = {
+    Yes_EditHMO: Yes_EditHMO,
+    NewHMOName: NewHMOName,
+    UserID: UserID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      console.log(response);
+      $("#Pop-Message").html("The data has successfully added!");
+    },
+  });
+}
+
+
 
 //ROOM
 //ADD ROOM MODAL 

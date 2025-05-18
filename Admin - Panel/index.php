@@ -613,7 +613,7 @@
             </div>
 
             <div class="MainDiv-Header-Right">
-              <button class="Btn_1" onclick="AddItems('HMO')"><i class="fa-solid fa-plus"></i> Add HMO</button>
+              <button class="Btn_1" onclick="AddHMO()"><i class="fa-solid fa-plus"></i> Add HMO</button>
               <div class="InputText3">
                 <input type="text" placeholder="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -642,7 +642,7 @@
                         <td class='TCenter'>" . $row['hmo_name'] . " </td>
                         <td> 
                             <div class='td-div'>
-                            <button class='Btn_1' onclick='EditHMO(`ArchivedView`,`".$row['hmo_id']."`)'><i class='fa-regular fa-eye'></i>Edit</button>
+                            <button class='Btn_1' onclick='EditHMO(".$row['hmo_id'].")'><i class='fa-regular fa-eye'></i>Edit</button>
                             <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button>
                           </div>
                         </td>
@@ -1017,7 +1017,7 @@
                     <div class='InputFieldForm'>
                       <div class='InputFieldFormChild1'>
                         <i class='InputFieldForm-i'>HMO Accreditation:</i>
-                        <button class='Btn_1' onclick="AddItems('HMO')">Add HMO</button>
+                        <button class='Btn_1' onclick="AddHmo()">Add HMO</button>
                       </div>
                       <div class='searchContainer-Parent'>
                         <div class='inputFlex'>
@@ -1190,6 +1190,12 @@
               </div>
             <!-- END --> 
 
+            <!-- Edit HMO --> 
+              <div class="Modal-DivDoctor Modal-EditHMO D1">
+                  <!-- Function Edit HMO -->
+              </div>
+            <!-- END --> 
+
             <!-- Add Room -->
              <div class="Modal-DivDoctor Modal-Room D1">
                 <div class="Modal-Sidebar-Top">
@@ -1326,6 +1332,22 @@
             </div>
           </div>
           <!-- END --> 
+
+          <!-- Edit HMO - Prompt -->
+          <div class="Prompt-Div Prompt-EditHMO">
+            <div class="Prompt-Message-Top">
+              <lord-icon src="https://cdn.lordicon.com/ygvjgdmk.json" trigger="loop" delay="1500" class="lord-icon"></lord-icon>
+              <h4>Are you sure?</h4>
+            </div>
+            <div class="Prompt-Message-Center">
+              <p class="P-Message">Are you sure you want to update this data?</p>
+            </div>
+            <div class="Prompt-Message-Bottom">
+              <button class="Btn_1" onclick="Yes_EditHMO(HMO_ID)">Yes</button>
+              <button class="Btn_2" onclick="HidePromptMessage()">No</button>
+            </div>
+          </div>
+          <!-- END -->
 
           <!-- Add Room - Prompt -->
           <div class="Prompt-Div Prompt-AddRoom">
