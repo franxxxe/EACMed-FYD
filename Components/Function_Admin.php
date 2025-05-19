@@ -1515,10 +1515,15 @@ if (isset($_POST["EditHMO_ID"])) {
             </div>
             <div class='Modal-Sidebar-Main'>
               <div class='ModalSidebar-Container AddDoctorDivContainer-Form'>
+
+                <label for=''> Details </label>
+
                 <div class='InputFieldForm'>
-                  <i class='InputFieldForm-i'>Current HMO Name</i>
+                  <i class='InputFieldForm-i'>HMO Name</i>
                   <div class='InputFieldForm-Info'> <span> " . $row1['hmo_name'] . " </span> </div>
                 </div>
+
+                <label for=''> Edit Section </label>
 
                 <div class='InputFieldForm'>
                   <i class='InputFieldForm-i'>New HMO Name: </i>
@@ -1582,13 +1587,288 @@ if (isset($_POST["AddRoom"])) {
   $query->execute([$Room]);
 }
 
+//EDIT ROOM 
+if (isset($_POST["EditRoom_ID"])) {
+  global $connMysqli;
+  $Room_ID = $_POST["EditRoom_ID"];
+
+  $FetchQuery = "SELECT * from room
+  WHERE room_id = '$Room_ID'";
+  $FetchQuery = mysqli_query($connMysqli, $FetchQuery);
+
+  if (!$FetchQuery) {
+    die('MySQL ErrorL ' . mysqli_error($conn));
+  }
+  if ($FetchQuery->num_rows > 0) {
+    while ($row1 = mysqli_fetch_assoc($FetchQuery)) {
+      echo " 
+            <div class='Modal-Sidebar-Top'>
+              <i class='fa-solid fa-user-tie'></i>
+              <h4>Edit Room</h4>
+            </div>
+            <div class='Modal-Sidebar-Main'>
+              <div class='ModalSidebar-Container AddDoctorDivContainer-Form'>
+
+                <label for=''> Details </label>
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Floor/Room:</i>
+                  <div class='InputFieldForm-Info'> <span> " . $row1['room_floor_name'] . " </span> </div>
+                </div>
+              
+                <label for=''> Edit Section </label>
+                
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>New Floor/Room: </i>
+                  <input type='text' id='EditRoomName' placeholder='Current: ".$row1['room_floor_name']."' value=''>
+                </div>
+
+              </div>
+            </div>
+            <div class='Modal-Sidebar-Bottom'>
+              <button class='Btn_1' onclick='PromptRoom(" . $row1['room_id'] . ")'>Edit</button>
+              <button class='Btn_2' onclick='ModalSidebarExit()'>Cancel</button>
+            </div> ";
+    };
+  } else {
+    echo "No Data Found";
+  }
+
+}
+
+//IF YES EDIT ROOM
+if (isset($_POST["Yes_EditRoom_ID"])) { 
+  global $connMysqli;
+
+  $EditedRoom_ID = $_POST["Yes_EditRoom_ID"]; 
+  $NewRoomName = $_POST["NewRoomName"];
+
+  $UserID = $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
+
+  //Fetching previous data before updating 
+  $LastUpdateQuery = "SELECT room_floor_name from room
+  WHERE room_id = '$EditedRoom_ID'";
+  $LastUpdateQuery = mysqli_query($connMysqli, $LastUpdateQuery);
+
+    if($LastUpdateQuery->num_rows > 0) {
+      while($row = mysqli_fetch_assoc($LastUpdateQuery)) {
+      $LastRoomName = $row['room_floor_name'];
+
+      $query = "UPDATE room SET room_floor_name = '$NewRoomName' WHERE room_id = '$EditedRoom_ID'";
+      mysqli_query($connMysqli, $query);
+
+      $EventType = "Update Data"; 
+      $EditDetails = 'Updated Floor/Room Name (Before: ' . $LastRoomName . ', After: ' . $NewRoomName . ')';
+
+      $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+      $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+    }
+  }
+
+}
 
 
 
+//ADD SPECIALIZATION 
+if (isset($_POST["AddSpecialization"])) {
+  $SpecializationName = $_POST["SpecializationNameToBeAdded"];
+  $UserID =  $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
+
+  $query = $connPDO->prepare("INSERT INTO `specialization`(specialization_name) VALUES(?)");
+  $query->execute([$SpecializationName]); 
+
+  $EventType = "Added Data"; 
+  $EditDetails = 'Added Specialization (Specialization Name: '. $SpecializationName .')';
+
+  $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+  $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+}
+
+//EDIT SPECIALIZATION
+if (isset($_POST["EditSpecialization_ID"])) {
+  global $connMysqli;
+  $Specialization_ID = $_POST["EditSpecialization_ID"];
+
+  $FetchQuery = "SELECT * from specialization
+  WHERE specialization_id = '$Specialization_ID'";
+  $FetchQuery = mysqli_query($connMysqli, $FetchQuery);
+
+  if (!$FetchQuery) {
+    die('MySQL ErrorL ' . mysqli_error($conn));
+  }
+  if ($FetchQuery->num_rows > 0) {
+    while ($row1 = mysqli_fetch_assoc($FetchQuery)) {
+      echo " 
+            <div class='Modal-Sidebar-Top'>
+              <i class='fa-solid fa-user-tie'></i>
+              <h4>Edit Specialization</h4>
+            </div>
+            <div class='Modal-Sidebar-Main'>
+              <div class='ModalSidebar-Container AddDoctorDivContainer-Form'>
+
+                <label for=''> Details </label>
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Specialization Name</i>
+                  <div class='InputFieldForm-Info'> <span> " . $row1['specialization_name'] . " </span> </div>
+                </div>
+              
+                <label for=''> Edit Section </label>
+                
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>New Specialization Name: </i>
+                  <input type='text' id='EditSpecializationName' placeholder='Current: ".$row1['specialization_name']."' value=''>
+                </div>
+
+              </div>
+            </div>
+            <div class='Modal-Sidebar-Bottom'>
+              <button class='Btn_1' onclick='PromptSpecialization(" . $row1['specialization_id'] . ")'>Edit</button>
+              <button class='Btn_2' onclick='ModalSidebarExit()'>Cancel</button>
+            </div> ";
+    };
+  } else {
+    echo "No Data Found";
+  }
+
+}
+
+//IF YES EDIT SPECIALIZATION
+if (isset($_POST["Yes_EditSpecialization_ID"])) { 
+  global $connMysqli;
+
+  $EditedSpecialization_ID = $_POST["Yes_EditSpecialization_ID"]; 
+  $NewSpecializationName = $_POST["NewSpecializationName"];
+
+  $UserID = $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
+
+  //Fetching previous data before updating 
+  $LastUpdateQuery = "SELECT specialization_name from specialization
+  WHERE specialization_id = '$EditedSpecialization_ID'";
+  $LastUpdateQuery = mysqli_query($connMysqli, $LastUpdateQuery);
+
+    if($LastUpdateQuery->num_rows > 0) {
+      while($row = mysqli_fetch_assoc($LastUpdateQuery)) {
+      $LastSpecializationName = $row['specialization_name'];
+
+      $query = "UPDATE specialization SET specialization_name = '$NewSpecializationName' WHERE specialization_id = '$EditedSpecialization_ID'";
+      mysqli_query($connMysqli, $query);
+
+      $EventType = "Update Data"; 
+      $EditDetails = 'Updated Specialization Name (Before: ' . $LastSpecializationName . ', After: ' . $NewSpecializationName . ')';
+
+      $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+      $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+    }
+  }
+
+}
+
+
+//ADD SUB-SPECIALIZATION 
+if (isset($_POST["AddSubSpecialization"])) {
+  $SubSpecializationName = $_POST["SubSpecializationNameToBeAdded"];
+  $UserID =  $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
+
+  $query = $connPDO->prepare("INSERT INTO `sub_specialization`(sub_specialization_name) VALUES(?)");
+  $query->execute([$SubSpecializationName]); 
+
+  $EventType = "Added Data"; 
+  $EditDetails = 'Added Sub-Specialization (Sub-specialization Name: '. $SubSpecializationName .')';
+
+  $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+  $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+}
 
 
 
+//EDIT SUB-SPECIALIZATION
+if (isset($_POST["EditSubSpecialization_ID"])) {
+  global $connMysqli;
+  $SubSpecialization_ID = $_POST["EditSubSpecialization_ID"];
 
+  $FetchQuery = "SELECT * from sub_specialization
+  WHERE sub_specialization_id = '$SubSpecialization_ID'";
+  $FetchQuery = mysqli_query($connMysqli, $FetchQuery);
+
+  if (!$FetchQuery) {
+    die('MySQL ErrorL ' . mysqli_error($conn));
+  }
+  if ($FetchQuery->num_rows > 0) {
+    while ($row1 = mysqli_fetch_assoc($FetchQuery)) {
+      echo " 
+            <div class='Modal-Sidebar-Top'>
+              <i class='fa-solid fa-user-tie'></i>
+              <h4>Edit Sub-specialization</h4>
+            </div>
+            <div class='Modal-Sidebar-Main'>
+              <div class='ModalSidebar-Container AddDoctorDivContainer-Form'>
+
+                <label for=''> Details </label>
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Sub-specialization Name</i>
+                  <div class='InputFieldForm-Info'> <span> " . $row1['sub_specialization_name'] . " </span> </div>
+                </div>
+              
+                <label for=''> Edit Section </label>
+                
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>New Sub-specialization Name: </i>
+                  <input type='text' id='EditSubSpecializationName' placeholder='Current: ".$row1['sub_specialization_name']."' value=''>
+                </div>
+
+              </div>
+            </div>
+            <div class='Modal-Sidebar-Bottom'>
+              <button class='Btn_1' onclick='PromptSpecialization(" . $row1['sub_specialization_id'] . ")'>Edit</button>
+              <button class='Btn_2' onclick='ModalSidebarExit()'>Cancel</button>
+            </div> ";
+    };
+  } else {
+    echo "No Data Found";
+  }
+
+}
+
+//IF YES EDIT SPECIALIZATION
+if (isset($_POST["Yes_EditSubSpecialization_ID"])) { 
+  global $connMysqli;
+
+  $EditedSubSpecialization_ID = $_POST["Yes_EditSubSpecialization_ID"]; 
+  $NewSubSpecializationName = $_POST["NewSubSpecializationName"];
+
+  $UserID = $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
+
+  //Fetching previous data before updating 
+  $LastUpdateQuery = "SELECT sub_specialization_name from sub_specialization
+  WHERE sub_specialization_id = '$EditedSpecialization_ID'";
+  $LastUpdateQuery = mysqli_query($connMysqli, $LastUpdateQuery);
+
+    if($LastUpdateQuery->num_rows > 0) {
+      while($row = mysqli_fetch_assoc($LastUpdateQuery)) {
+      $LastSpecializationName = $row['specialization_name'];
+
+      $query = "UPDATE specialization SET specialization_name = '$NewSpecializationName' WHERE specialization_id = '$EditedSpecialization_ID'";
+      mysqli_query($connMysqli, $query);
+
+      $EventType = "Update Data"; 
+      $EditDetails = 'Updated Specialization Name (Before: ' . $LastSpecializationName . ', After: ' . $NewSpecializationName . ')';
+
+      $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+      $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+    }
+  }
+
+}
 
 
 ?>

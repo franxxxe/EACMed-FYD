@@ -1148,14 +1148,14 @@ function AddRoom() {
   $(".Modal-Container").css("display", "flex");
 }
 
-//ADD HMO PROMPT 
+//ADD ROOM PROMPT 
 function AddNewRoom() {
   $(".Prompt-Message").css("display", "flex");
   $(".Prompt-AddRoom").css("display", "flex");
   $(".Prompt-AddRoom").siblings().css("display", "none");
 }
 
-//IF YES ADD HMO 
+//IF YES ADD ROOM 
 function Yes_AddRoom(AddRoom) {
   PopMessages();
   var data = {
@@ -1171,6 +1171,239 @@ function Yes_AddRoom(AddRoom) {
     success: function (response) {
       // console.log(response);
       $("#Pop-Message").html("The data has successfully added!");
+    },
+  });
+}
+
+//EDIT ROOM - FUNCTION 
+function EditRoom(EditRoom_ID) {
+  $(".Modal-Sidebar").css("display", "flex");
+  $(".Modal-EditRoom").css("display", "flex");
+  $(".Modal-EditRoom").siblings().css("display", "none");
+
+  selectedID = EditRoom_ID;
+
+  var data = {
+    EditRoom_ID: EditRoom_ID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      // console.log(response);
+      $(".Modal-EditRoom").html(response);
+    },
+  });
+}
+
+//IF YES EDIT ROOM
+let Room_ID = '';
+function PromptRoom(PromptRoom_ID) {
+  $(".Prompt-Message").css("display", "flex");
+  $(".Prompt-EditRoom").css("display", "flex");
+  $(".Prompt-EditRoom").siblings().css("display", "none");
+  Room_ID = PromptRoom_ID; 
+  // console.log(HMO_ID);
+}
+
+function Yes_EditRoom(Yes_EditRoom_ID) {
+  var NewRoomName = $("#EditRoomName").val();
+
+  PopMessages();
+  var data = {
+    Yes_EditRoom_ID: Yes_EditRoom_ID,
+    NewRoomName: NewRoomName,
+    UserID: UserID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      console.log(response);
+      $("#Pop-Message").html("The data has successfully updated!");
+    },
+  });
+}
+
+
+
+//SPECIALIZATION 
+
+//ADD SPECIALIZATION 
+function AddSpecialization() {
+  $(".Modal-Sidebar").css("display", "flex");
+  $(".Modal-Specialization").css("display", "flex");
+  $(".Modal-Specialization").siblings().css("display", "none");
+  $(".Modal-Container").css("display", "flex");
+}
+
+//ADD SPECIALIZATION PROMPT 
+function AddNewSpecialization() {
+  $(".Prompt-Message").css("display", "flex");
+  $(".Prompt-AddSpecialization").css("display", "flex");
+  $(".Prompt-AddSpecialization").siblings().css("display", "none");
+}
+
+//IF YES ADD NEW SPECIALIZATION
+function Yes_AddSpecialization(AddSpecialization) {
+  PopMessages();
+  var data = {
+    AddSpecialization: AddSpecialization,
+    SpecializationNameToBeAdded: $("#Specialization_ToBeAdd").val(),
+    UserID: UserID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      // console.log(response);
+      $("#Pop-Message").html("The data has successfully added!");
+    },
+  });
+}
+
+//EDIT ROOM - FUNCTION 
+function EditSpecialization(EditSpecialization_ID) {
+  $(".Modal-Sidebar").css("display", "flex");
+  $(".Modal-EditSpecialization").css("display", "flex");
+  $(".Modal-EditSpecialization").siblings().css("display", "none");
+
+  selectedID = EditSpecialization_ID;
+
+  var data = {
+    EditSpecialization_ID: EditSpecialization_ID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      // console.log(response);
+      $(".Modal-EditSpecialization").html(response);
+    },
+  });
+}
+
+//IF YES EDIT SPECIALIZATION
+let Specialization_ID = '';
+function PromptSpecialization(PromptSpecialization_ID) {
+  $(".Prompt-Message").css("display", "flex");
+  $(".Prompt-EditSpecialization").css("display", "flex");
+  $(".Prompt-EditSpecialization").siblings().css("display", "none");
+  Specialization_ID = PromptSpecialization_ID; 
+  // console.log(Specialization_ID);
+}
+
+function Yes_EditSpecialization(Yes_EditSpecialization_ID) {
+  var NewSpecializationName = $("#EditSpecializationName").val();
+
+  PopMessages();
+  var data = {
+    Yes_EditSpecialization_ID: Yes_EditSpecialization_ID,
+    NewSpecializationName: NewSpecializationName,
+    UserID: UserID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      console.log(response);
+      $("#Pop-Message").html("The data has successfully updated!");
+    },
+  });
+}
+
+
+
+
+//SUB-SPECIALIZATION 
+
+//ADD SUB-SPECIALIZATION 
+function AddSubSpecialization() {
+  $(".Modal-Sidebar").css("display", "flex");
+  $(".Modal-SubSpecialization").css("display", "flex");
+  $(".Modal-SubSpecialization").siblings().css("display", "none");
+  $(".Modal-Container").css("display", "flex");
+}
+
+//ADD SUB-SPECIALIZATION PROMPT 
+function AddNewSubSpecialization() {
+  $(".Prompt-Message").css("display", "flex");
+  $(".Prompt-AddSubSpecialization").css("display", "flex");
+  $(".Prompt-AddSubSpecialization").siblings().css("display", "none");
+}
+
+//IF YES ADD NEW SUB-SPECIALIZATION
+function Yes_AddSubSpecialization(AddSubSpecialization) {
+  PopMessages();
+  var data = {
+    AddSubSpecialization: AddSubSpecialization,
+    SubSpecializationNameToBeAdded: $("#SubSpecializationToAdd").val(),
+    UserID: UserID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      // console.log(response);
+      $("#Pop-Message").html("The data has successfully added!");
+    },
+  });
+}
+
+//EDIT SUB-SPECIALIZATION - FUNCTION 
+function EditSubSpecialization(EditSubSpecialization_ID) {
+  $(".Modal-Sidebar").css("display", "flex");
+  $(".Modal-EditSubSpecialization").css("display", "flex");
+  $(".Modal-EditSubSpecialization").siblings().css("display", "none");
+
+  selectedID = EditSubSpecialization_ID;
+
+  var data = {
+    EditSubSpecialization_ID: EditSubSpecialization_ID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      // console.log(response);
+      $(".Modal-EditSubSpecialization").html(response);
+    },
+  });
+}
+
+//IF YES EDIT SPECIALIZATION
+let Sub_Specialization_ID = '';
+function PromptSubSpecialization(PromptSubSpecialization_ID) {
+  $(".Prompt-Message").css("display", "flex");
+  $(".Prompt-EditSubSpecialization").css("display", "flex");
+  $(".Prompt-EditSubSpecialization").siblings().css("display", "none");
+  Sub_Specialization_ID = PromptSubSpecialization_ID; 
+  // console.log(Specialization_ID);
+}
+
+function Yes_EditSubSpecialization(Yes_EditSubSpecialization_ID) {
+  var NewSubSpecializationName = $("#EditSubSpecializationName").val();
+
+  PopMessages();
+  var data = {
+    Yes_EditSubSpecialization_ID: Yes_EditSubSpecialization_ID,
+    NewSubSpecializationName: NewSubSpecializationName,
+    UserID: UserID,
+  };
+  $.ajax({
+    url: "../Components/Function_Admin.php",
+    type: "post",
+    data: data,
+    success: function (response) {
+      console.log(response);
+      $("#Pop-Message").html("The data has successfully updated!");
     },
   });
 }

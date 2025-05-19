@@ -642,8 +642,8 @@
                         <td class='TCenter'>" . $row['hmo_name'] . " </td>
                         <td> 
                             <div class='td-div'>
-                            <button class='Btn_1' onclick='EditHMO(".$row['hmo_id'].")'><i class='fa-regular fa-eye'></i>Edit</button>
-                            <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button>
+                            <button class='Btn_1' onclick='EditHMO(".$row['hmo_id'].")'><i class='fa-solid fa-pen-to-square'></i>Edit</button>
+                            <!-- <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button> -->
                           </div>
                         </td>
                       </tr>
@@ -666,7 +666,7 @@
             </div>
 
             <div class="MainDiv-Header-Right">
-              <button class="Btn_1" onclick="AddItems('Room')"><i class="fa-solid fa-plus"></i> Add Room</button>
+              <button class="Btn_1" onclick="AddRoom()"><i class="fa-solid fa-plus"></i> Add Room</button>
               <div class="InputText3">
                 <input type="text" placeholder="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -695,8 +695,8 @@
                         <td class='TCenter'>" . $row['room_floor_name'] . " </td>
                         <td> 
                             <div class='td-div'>
-                            <button class='Btn_1' onclick='EditHMO(`ArchivedView`,`".$row['room_id']."`)'><i class='fa-regular fa-eye'></i>Edit</button>
-                            <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button>
+                            <button class='Btn_1' onclick='EditRoom(".$row['room_id'].")'><i class='fa-solid fa-pen-to-square'></i>Edit</button>
+                            <!-- <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button> -->
                           </div>
                         </td>
                       </tr>
@@ -719,7 +719,7 @@
             </div>
 
             <div class="MainDiv-Header-Right">
-              <button class="Btn_1" onclick="AddItems('Specs')"><i class="fa-solid fa-plus"></i> Add Specialization</button>
+              <button class="Btn_1" onclick="AddSpecialization()"><i class="fa-solid fa-plus"></i> Add Specialization</button>
               <div class="InputText3">
                 <input type="text" placeholder="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -748,8 +748,7 @@
                         <td class='TCenter'>" . $row['specialization_name'] . " </td>
                         <td> 
                             <div class='td-div'>
-                            <button class='Btn_1' onclick='EditHMO(`ArchivedView`,`".$row['specialization_id']."`)'><i class='fa-regular fa-eye'></i>Edit</button>
-                            <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button>
+                            <button class='Btn_1' onclick='EditSpecialization(".$row['specialization_id'].")'> <i class='fa-solid fa-pen-to-square'></i> Edit</button>
                           </div>
                         </td>
                       </tr>
@@ -772,7 +771,7 @@
             </div>
 
             <div class="MainDiv-Header-Right">
-              <button class="Btn_1" onclick="AddItems('SubSpecs')"><i class="fa-solid fa-plus"></i> Add Sub-specialization</button>
+              <button class="Btn_1" onclick="AddSubSpecialization()"><i class="fa-solid fa-plus"></i> Add Sub-specialization</button>
               <div class="InputText3">
                 <input type="text" placeholder="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -801,8 +800,7 @@
                         <td class='TCenter'>" . $row['sub_specialization_name'] . " </td>
                         <td> 
                             <div class='td-div'>
-                            <button class='Btn_1' onclick='EditHMO(`ArchivedView`,`".$row['sub_specialization_id']."`)'><i class='fa-regular fa-eye'></i>Edit</button>
-                            <button class='Btn_2' onclick=''><i class='fa-solid fa-trash-arrow-up'></i>Set Inactive</button>
+                            <button class='Btn_1' onclick='EditSubSpecialization(".$row['sub_specialization_id'].")'><i class='fa-solid fa-pen-to-square'></i>Edit</button>
                           </div>
                         </td>
                       </tr>
@@ -1222,11 +1220,87 @@
               </div>
             <!-- END --> 
 
-            <!-- Add Specialization --> 
+            <!-- Edit Room -->
+            <div class="Modal-DivDoctor Modal-EditRoom D1">
+                  <!-- Function Edit Room -->
+            </div>
+            <!-- END -->
+
+            <!-- Add Specialization -->
+             <div class="Modal-DivDoctor Modal-Specialization D1">
+                <div class="Modal-Sidebar-Top">
+                  <i class="fa-solid fa-notes-medical"></i>
+                  <h4>Add Specialization</h4>
+                </div>
+                <div class="Modal-Sidebar-Main Modal-Not-Capitalize">
+                  <div class="AddDoctorDivContainer-Form">
+                    <!-- <h4>Username</h4> -->
+                    <div class="InputFieldForm">
+                      <i class='InputFieldForm-i'>Specialization</i>
+                      <input type="text" placeholder="(ex. Internal Medicine)" id="Specialization_ToBeAdd">
+                    </div>
+                  </div>
+                </div>
+                <div class="Modal-Sidebar-Bottom">
+                  <button class="Btn_1" onclick="AddNewSpecialization()">Add</button>
+                  <button class="Btn_2" onclick="ModalSidebarExit()">Cancel</button>
+                </div>
+              </div> 
             <!-- END --> 
+            
+            <!-- Edit Specialization -->
+              <div class="Modal-DivDoctor Modal-EditSpecialization D1">
+                    <!-- Function Edit Specialization -->
+              </div>
+            <!-- END -->
 
             <!-- Add Sub-specialization --> 
+            <div class="Modal-DivDoctor Modal-SubSpecialization D1">
+                <div class="Modal-Sidebar-Top">
+                  <i class="fa-solid fa-notes-medical"></i>
+                  <h4>Add Sub-specialization</h4>
+                </div>
+                <div class="Modal-Sidebar-Main Modal-Not-Capitalize">
+                  <div class="AddDoctorDivContainer-Form">
+                    <div class="InputFieldForm">
+                      <i class='InputFieldForm-i'>Sub-Specialization</i>
+                      <input type="text" placeholder="(ex. Cardiology)" id="SubSpecializationToAdd">
+                    </div>
+
+                    <div class="InputFieldForm">
+                      <i class='InputFieldForm-i'>Specialization</i>
+                      <select name="SubSpecializationToDepend" id="SubSpecializationToDepend">
+                        <?php 
+                          $query = "SELECT * FROM specialization"; 
+                          $query = mysqli_query($connMysqli, $query);
+
+                          if($query->num_rows > 0) {
+                            while($row = mysqli_fetch_assoc($query)) {
+                              echo "<option value='" . htmlspecialchars($row['specialization_id']) . "'>" . htmlspecialchars($row['specialization_name']) . "</option>";
+                            };
+                          }  
+                          
+                          else {
+                              echo "No data found";     
+                          }
+                        ?>
+                      </select>
+                    </div>
+                    
+                  </div>
+                </div>
+                <div class="Modal-Sidebar-Bottom">
+                  <button class="Btn_1" onclick="AddNewSubSpecialization()">Add</button>
+                  <button class="Btn_2" onclick="ModalSidebarExit()">Cancel</button>
+                </div>
+              </div>
             <!-- END --> 
+
+            <!-- Edit Sub-specialization --> 
+            <div class="Modal-DivDoctor Modal-EditSubSpecialization D1">
+                <!-- Function Edit Sub-specialization -->
+            </div>
+            <!-- END -->
 
           </div>
         </div>
@@ -1364,6 +1438,86 @@
             </div>
           </div>
           <!-- END --> 
+
+          <!-- Edit Room - Prompt -->
+          <div class="Prompt-Div Prompt-EditRoom">
+            <div class="Prompt-Message-Top">
+              <lord-icon src="https://cdn.lordicon.com/ygvjgdmk.json" trigger="loop" delay="1500" class="lord-icon"></lord-icon>
+              <h4>Are you sure?</h4>
+            </div>
+            <div class="Prompt-Message-Center">
+              <p class="P-Message">Are you sure you want to update this data?</p>
+            </div>
+            <div class="Prompt-Message-Bottom">
+              <button class="Btn_1" onclick="Yes_EditRoom(Room_ID)">Yes</button>
+              <button class="Btn_2" onclick="HidePromptMessage()">No</button>
+            </div>
+          </div>
+          <!-- END --> 
+
+          <!-- Add Specialization - Prompt --> 
+          <div class="Prompt-Div Prompt-AddSpecialization">
+            <div class="Prompt-Message-Top">
+              <lord-icon src="https://cdn.lordicon.com/ygvjgdmk.json" trigger="loop" delay="1500" class="lord-icon"></lord-icon>
+              <h4>Are you sure?</h4>
+            </div>
+            <div class="Prompt-Message-Center">
+              <p class="P-Message">Are you sure you want to add this data?</p>
+            </div>
+            <div class="Prompt-Message-Bottom">
+              <button class="Btn_1" onclick="Yes_AddSpecialization('AddSpecialization')">Yes</button>
+              <button class="Btn_2" onclick="HidePromptMessage()">No</button>
+            </div>
+          </div>
+          <!-- END --> 
+
+          <!-- Edit Specialization - Prompt --> 
+          <div class="Prompt-Div Prompt-EditSpecialization">
+            <div class="Prompt-Message-Top">
+              <lord-icon src="https://cdn.lordicon.com/ygvjgdmk.json" trigger="loop" delay="1500" class="lord-icon"></lord-icon>
+              <h4>Are you sure?</h4>
+            </div>
+            <div class="Prompt-Message-Center">
+              <p class="P-Message">Are you sure you want to update this data?</p>
+            </div>
+            <div class="Prompt-Message-Bottom">
+              <button class="Btn_1" onclick="Yes_EditSpecialization(Specialization_ID)">Yes</button>
+              <button class="Btn_2" onclick="HidePromptMessage()">No</button>
+            </div>
+          </div>
+          <!-- END --> 
+
+          <!-- Add Sub-specialization - Prompt --> 
+          <div class="Prompt-Div Prompt-AddSubSpecialization">
+            <div class="Prompt-Message-Top">
+              <lord-icon src="https://cdn.lordicon.com/ygvjgdmk.json" trigger="loop" delay="1500" class="lord-icon"></lord-icon>
+              <h4>Are you sure?</h4>
+            </div>
+            <div class="Prompt-Message-Center">
+              <p class="P-Message">Are you sure you want to add this data?</p>
+            </div>
+            <div class="Prompt-Message-Bottom">
+              <button class="Btn_1" onclick="Yes_AddSubSpecialization('AddSubSpecialization')">Yes</button>
+              <button class="Btn_2" onclick="HidePromptMessage()">No</button>
+            </div>
+          </div>
+          <!-- END -->
+
+          <!-- Edit Sub-specialization - Prompt --> 
+          <div class="Prompt-Div Prompt-EditSubSpecialization">
+            <div class="Prompt-Message-Top">
+              <lord-icon src="https://cdn.lordicon.com/ygvjgdmk.json" trigger="loop" delay="1500" class="lord-icon"></lord-icon>
+              <h4>Are you sure?</h4>
+            </div>
+            <div class="Prompt-Message-Center">
+              <p class="P-Message">Are you sure you want to update this data?</p>
+            </div>
+            <div class="Prompt-Message-Bottom">
+              <button class="Btn_1" onclick="Yes_EditSubSpecialization(Sub_Specialization_ID)">Yes</button>
+              <button class="Btn_2" onclick="HidePromptMessage()">No</button>
+            </div>
+          </div>
+          <!-- END -->
 
         </div>
       </section>

@@ -29,6 +29,10 @@
   border-radius: 4px;
 }
 
+.Btn_1 .fa-pen-to-square {
+  color: white;
+}
+
 .tooltip::before {
   content: attr(data-title);
   position: absolute;
