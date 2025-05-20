@@ -1773,17 +1773,28 @@ if (isset($_POST["Yes_EditSpecialization_ID"])) {
 //ADD SUB-SPECIALIZATION 
 if (isset($_POST["AddSubSpecialization"])) {
   $SubSpecializationName = $_POST["SubSpecializationNameToBeAdded"];
+  $SelectedSpecialization = $_POST["Sub SpecializationToDepend"];
   $UserID =  $_POST["UserID"];
   $decrypted_user_id = decrypt_user_id($UserID);
 
-  $query = $connPDO->prepare("INSERT INTO `sub_specialization`(sub_specialization_name) VALUES(?)");
-  $query->execute([$SubSpecializationName]); 
+  $query = $connPDO->prepare("INSERT INTO `sub_specialization`(sub_specs_id, sub_specialization_name) VALUES(?,?)");
+  $query->execute([$SelectedSpecialization, $SubSpecializationName]); 
 
-  $EventType = "Added Data"; 
-  $EditDetails = 'Added Sub-Specialization (Sub-specialization Name: '. $SubSpecializationName .')';
+  $SpecializationDataQuery = "SELECT specialization_name from specialization
+  WHERE specialization_id = '$SelectedSpecialization'";
+  $SpecializationDataQuery = mysqli_query($connMysqli, $SpecializationDataQuery);
 
-  $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
-  $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+    if($SpecializationDataQuery->num_rows > 0) {
+      while($row = mysqli_fetch_assoc($SpecializationDataQuery)) {
+      $SpecializationName = $row['specialization_name'];
+
+      $EventType = "Added Data"; 
+      $EditDetails = 'Added Sub-Specialization (Sub-specialization Name: '. $SubSpecializationName .', under ' . $SpecializationName . ')';
+
+      $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+      $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+    }
+  }
 }
 
 
@@ -1794,7 +1805,8 @@ if (isset($_POST["EditSubSpecialization_ID"])) {
   $SubSpecialization_ID = $_POST["EditSubSpecialization_ID"];
 
   $FetchQuery = "SELECT * from sub_specialization
-  WHERE sub_specialization_id = '$SubSpecialization_ID'";
+  INNER JOIN specialization ON sub_specialization.sub_specs_id = specialization.specialization_id
+  WHERE sub_specialization_id = $SubSpecialization_ID";
   $FetchQuery = mysqli_query($connMysqli, $FetchQuery);
 
   if (!$FetchQuery) {
@@ -1816,19 +1828,50 @@ if (isset($_POST["EditSubSpecialization_ID"])) {
                   <i class='InputFieldForm-i'>Sub-specialization Name</i>
                   <div class='InputFieldForm-Info'> <span> " . $row1['sub_specialization_name'] . " </span> </div>
                 </div>
+
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>Specialization Name</i>
+                  <div class='InputFieldForm-Info'> 
+                    <span> 
+                    ". $row1['specialization_name'] ."
+                    </span> 
+                  </div>
+                </div>
               
                 <label for=''> Edit Section </label>
                 
+                <div class='InputFieldForm'>
+                  <i class='InputFieldForm-i'>New Specialization Name: </i>
+                  <select name='NewSpecForSubSpec' id='NewSpecForSubSpec'> ";
+                  $sub_specs_id = $row1['sub_specs_id']; 
+
+                  $query = "SELECT * FROM specialization"; 
+                  $query = mysqli_query($connMysqli, $query);
+
+                  if($query->num_rows > 0) {
+                    while($row2 = mysqli_fetch_assoc($query)) {
+                        $NewSelectedSpecialization = ($row2['specialization_id'] == $sub_specs_id) ? "selected" : "";
+                        echo "<option value='" . htmlspecialchars($row2['specialization_id']) . "' $NewSelectedSpecialization>" . htmlspecialchars($row2['specialization_name']) . "</option>";
+                    };
+                  }  
+                          
+                  else {
+                        echo "No data found";     
+                  }
+
+                echo "
+                  </select>
+                </div>
 
                 <div class='InputFieldForm'>
                   <i class='InputFieldForm-i'>New Sub-specialization Name: </i>
-                  <input type='text' id='EditSubSpecializationName' placeholder='Current: ".$row1['sub_specialization_name']."' value=''>
+                  <input type='text' id='EditSubSpecializationName' placeholder='Current: ".$row1['sub_specialization_name']."' value='".$row1['sub_specialization_name']."'>
                 </div>
 
               </div>
             </div>
             <div class='Modal-Sidebar-Bottom'>
-              <button class='Btn_1' onclick='PromptSpecialization(" . $row1['sub_specialization_id'] . ")'>Edit</button>
+              <button class='Btn_1' onclick='PromptSubSpecialization(" . $row1['sub_specialization_id'] . ")'>Edit</button>
               <button class='Btn_2' onclick='ModalSidebarExit()'>Cancel</button>
             </div> ";
     };
@@ -1838,36 +1881,58 @@ if (isset($_POST["EditSubSpecialization_ID"])) {
 
 }
 
-//IF YES EDIT SPECIALIZATION
+//IF YES EDIT SUB-SPECIALIZATION
 if (isset($_POST["Yes_EditSubSpecialization_ID"])) { 
   global $connMysqli;
 
   $EditedSubSpecialization_ID = $_POST["Yes_EditSubSpecialization_ID"]; 
   $NewSubSpecializationName = $_POST["NewSubSpecializationName"];
+  $NewSelectedSpecialization = $_POST["NewSelectedSpecialization"];
 
   $UserID = $_POST["UserID"];
   $decrypted_user_id = decrypt_user_id($UserID);
 
   //Fetching previous data before updating 
-  $LastUpdateQuery = "SELECT sub_specialization_name from sub_specialization
-  WHERE sub_specialization_id = '$EditedSpecialization_ID'";
+  $LastUpdateQuery = "SELECT * from sub_specialization
+  INNER JOIN specialization ON sub_specialization.sub_specs_id = specialization.specialization_id
+  WHERE sub_specialization_id = '$EditedSubSpecialization_ID'";
   $LastUpdateQuery = mysqli_query($connMysqli, $LastUpdateQuery);
 
     if($LastUpdateQuery->num_rows > 0) {
       while($row = mysqli_fetch_assoc($LastUpdateQuery)) {
+      $LastSubSpecializationName = $row['sub_specialization_name'];
       $LastSpecializationName = $row['specialization_name'];
 
-      $query = "UPDATE specialization SET specialization_name = '$NewSpecializationName' WHERE specialization_id = '$EditedSpecialization_ID'";
+      $query = "UPDATE sub_specialization SET sub_specialization_name = '$NewSubSpecializationName', sub_specs_id = $NewSelectedSpecialization WHERE sub_specialization_id = $EditedSubSpecialization_ID";
       mysqli_query($connMysqli, $query);
 
-      $EventType = "Update Data"; 
-      $EditDetails = 'Updated Specialization Name (Before: ' . $LastSpecializationName . ', After: ' . $NewSpecializationName . ')';
+      //Fetching updated specialization name
+      $FetchingSpecializationName = "SELECT * from sub_specialization
+      INNER JOIN specialization ON sub_specialization.sub_specs_id = specialization.specialization_id
+      WHERE sub_specialization_id = $EditedSubSpecialization_ID";
+      $FetchingSpecializationName = mysqli_query($connMysqli, $FetchingSpecializationName);
 
-      $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
-      $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+      if($FetchingSpecializationName->num_rows > 0) {
+        while($row1 = mysqli_fetch_assoc($FetchingSpecializationName)) {
+          $UpdatedSpecializationName = $row1['specialization_name'];
+          $UpdatedSubSpecializationName = $NewSubSpecializationName;
+
+          $EventType = "Update Data"; 
+          $EditDetails = 'Updated Sub-Specialization Name (Before: ' . $LastSubSpecializationName . ' under '. $LastSpecializationName .', After: ' . $UpdatedSubSpecializationName . ' under ' . $UpdatedSpecializationName . ')';
+
+          $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+          $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
+        }
+      }
+      else {
+        echo "error";
+      }
     }
   }
 
+  else {
+    echo "error, please try again";
+  }
 }
 
 

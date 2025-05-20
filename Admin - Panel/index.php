@@ -784,6 +784,7 @@
                 <thead>
                   <tr class="Tr-Header">
                     <th>ID</th>
+                    <th>Sub-specialization Name</th>
                     <th>Specialization Name</th>
                     <th>Action</th>
                   </tr>
@@ -791,13 +792,15 @@
 
                 <tbody class="tbody-archived">
                   <?php
-                  $FetchSubSpecialization = "SELECT * from sub_specialization";
+                  $FetchSubSpecialization = "SELECT * from sub_specialization
+                  INNER JOIN specialization ON sub_specialization.sub_specs_id = specialization.specialization_id";
                   $FetchSubSpecialization = mysqli_query($connMysqli, $FetchSubSpecialization);
                   while ($row = mysqli_fetch_assoc($FetchSubSpecialization)) {
                     echo "
                       <tr class='tr-archived'>
                         <td class='TCenter'>".$row['sub_specialization_id']." </td>
                         <td class='TCenter'>" . $row['sub_specialization_name'] . " </td>
+                        <td class='TCenter'>" . $row['specialization_name'] . " </td>
                         <td> 
                             <div class='td-div'>
                             <button class='Btn_1' onclick='EditSubSpecialization(".$row['sub_specialization_id'].")'><i class='fa-solid fa-pen-to-square'></i>Edit</button>
@@ -1470,6 +1473,8 @@
             </div>
           </div>
           <!-- END --> 
+
+          
 
           <!-- Edit Specialization - Prompt --> 
           <div class="Prompt-Div Prompt-EditSpecialization">

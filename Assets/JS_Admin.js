@@ -1343,6 +1343,7 @@ function Yes_AddSubSpecialization(AddSubSpecialization) {
   var data = {
     AddSubSpecialization: AddSubSpecialization,
     SubSpecializationNameToBeAdded: $("#SubSpecializationToAdd").val(),
+    SubSpecializationToDepend: $("#SubSpecializationToDepend").val(),
     UserID: UserID,
   };
   $.ajax({
@@ -1350,7 +1351,7 @@ function Yes_AddSubSpecialization(AddSubSpecialization) {
     type: "post",
     data: data,
     success: function (response) {
-      // console.log(response);
+      console.log(response);
       $("#Pop-Message").html("The data has successfully added!");
     },
   });
@@ -1372,29 +1373,31 @@ function EditSubSpecialization(EditSubSpecialization_ID) {
     type: "post",
     data: data,
     success: function (response) {
-      // console.log(response);
+      console.log(response);
       $(".Modal-EditSubSpecialization").html(response);
     },
   });
 }
 
-//IF YES EDIT SPECIALIZATION
+//IF YES EDIT SUB-SPECIALIZATION
 let Sub_Specialization_ID = '';
 function PromptSubSpecialization(PromptSubSpecialization_ID) {
   $(".Prompt-Message").css("display", "flex");
   $(".Prompt-EditSubSpecialization").css("display", "flex");
   $(".Prompt-EditSubSpecialization").siblings().css("display", "none");
   Sub_Specialization_ID = PromptSubSpecialization_ID; 
-  // console.log(Specialization_ID);
+  console.log(Sub_Specialization_ID);
 }
 
 function Yes_EditSubSpecialization(Yes_EditSubSpecialization_ID) {
   var NewSubSpecializationName = $("#EditSubSpecializationName").val();
+  var NewSelectedSpecialization = $("#NewSpecForSubSpec").val();
 
   PopMessages();
   var data = {
     Yes_EditSubSpecialization_ID: Yes_EditSubSpecialization_ID,
     NewSubSpecializationName: NewSubSpecializationName,
+    NewSelectedSpecialization: NewSelectedSpecialization,
     UserID: UserID,
   };
   $.ajax({
