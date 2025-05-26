@@ -20,24 +20,37 @@
   if(isset($_POST['Login-Admin'])){
     $login_email_address = mysqli_real_escape_string($connMysqli, $_POST['username']); // Sanitize input
     $login_password = mysqli_real_escape_string($connMysqli, $_POST['password']); // Sanitize input
-    $stmt = $connMysqli->prepare("SELECT admin_id , admin_username, admin_password FROM admin_accounts WHERE admin_username = ? LIMIT 1");
+    $stmt = $connMysqli->prepare("SELECT admin_id , admin_username, admin_password, admin_account_status FROM admin_accounts WHERE admin_username = ? LIMIT 1");
+    
     if ($stmt) {
       $stmt->bind_param("s", $login_email_address);
-      if ($stmt->execute()) {
-        $stmt->bind_result($db_access_id, $db_email_address, $db_password_hash);
-          if ($stmt->fetch()) {
-            if (password_verify($login_password, $db_password_hash)) {
-              $_SESSION['Admin_Id'] = $db_access_id;
-              // $_SESSION['france'] = $db_access_id;
-              $_SESSION['message'] = 'Welcome ' . $db_email_address;
-              header("Location: ../Admin - Panel"); 
-              exit(); 
-            } else{ $message[] = 'Incorrect Username or Password!';}
-          } else{ $message[] = 'Incorrect Username or Password!'; }
-      } else{ $message[] = 'Incorrect Username or Password!'; }
-      $stmt->close();
-    } else{ $message[] = 'Incorrect Username or Password!'; }
-    $connMysqli->close();
+        if ($stmt->execute()) {
+            $stmt->bind_result($db_access_id, $db_email_address, $db_password_hash, $db_account_status);
+            if ($stmt->fetch()) {
+                if (password_verify($login_password, $db_password_hash)) {
+                    $_SESSION['Admin_Id'] = $db_access_id;
+                    $_SESSION['message'] = 'Welcome ' . $db_email_address;
+                    if ($db_account_status == 'New') {
+                        $_SESSION['Password_Setup'] = true;
+                        header("Location: ../Admin Password Setup");
+                        exit();
+                    } else {
+                        header("Location: ../Admin - Panel");
+                        exit();
+                    }
+                } else {
+                    $message[] = 'Incorrect Username or Password!';
+                }
+            } else {
+                $message[] = 'Incorrect Username or Password!';
+            }
+        } else {
+            $message[] = 'Incorrect Username or Password!';
+        }
+    $stmt->close();
+    } else {
+        $message[] = 'Incorrect Username or Password!';
+    }
   }
 ?>
 
