@@ -15,4 +15,14 @@ $(document).ready(function(){
          $('.test-input').prop('type', 'password');
     }
   });
+
+  $('.checkNewShowPassword').click(function(){
+    if ($('.NewPassword').attr('type') === 'password' && $('.test-input').attr('type') === 'password') {
+        $('.NewPassword').prop('type', 'text');
+        $('.test-input').prop('type', 'text');
+    } else {
+        $('.NewPassword').prop('type', 'password');
+        $('.test-input').prop('type', 'password');
+    }
+  });
 })

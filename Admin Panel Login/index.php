@@ -31,7 +31,6 @@
                     $_SESSION['Admin_Id'] = $db_access_id;
                     $_SESSION['message'] = 'Welcome ' . $db_email_address;
                     if ($db_account_status == 'New') {
-                        $_SESSION['Password_Setup'] = true;
                         header("Location: ../Admin Password Setup");
                         exit();
                     } else {
@@ -39,17 +38,17 @@
                         exit();
                     }
                 } else {
-                    $message[] = 'Incorrect Username or Password!';
+                    $message[] = 'Incorrect Username or Password! 2';
                 }
             } else {
-                $message[] = 'Incorrect Username or Password!';
+                $message[] = 'Incorrect Username or Password! 3';
             }
         } else {
-            $message[] = 'Incorrect Username or Password!';
+            $message[] = 'Incorrect Username or Password! 4';
         }
     $stmt->close();
     } else {
-        $message[] = 'Incorrect Username or Password!';
+        $message[] = 'Incorrect Username or Password! 5';
     }
   }
 ?>

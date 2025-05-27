@@ -231,7 +231,7 @@ if (isset($_POST["AccessAccount"])) {
 
   $AccessUsername = $_POST["AccessUsername"];
   $AccessType = $_POST["AccessType"];
-  $DefaultAccess = '$2y$10$TX6XGGHg9b5BrZuHA6bJCOa9scgvdYtv1CUc1S1oQIcVPPES5SpyW';
+  $DefaultAccess = '$2y$10$ZkgThNp4XqRGDaXyuXVtr.5RGI0DsFW3Bop9MW1m.ZE7WVT6AnHvO';
   $StrTimestamp = strtotime("$Date $Time");
   $Current_Timestamp = date("Y-m-d H:i:s", $StrTimestamp);
   $AccountStatus = 'New';

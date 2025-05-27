@@ -1,13 +1,52 @@
 <?php
-  session_start();
-  include '../Config/Configure.php';
+session_start();
+include '../Config/Configure.php';
 
-  date_default_timezone_set("Asia/Manila");
-  $date = date("Y-m-d");
-  $date2 = date("Y-M-d");
-  $time = date("h:i:sa");
+date_default_timezone_set("Asia/Manila");
+$date = date("Y-m-d");
+$date2 = date("Y-M-d");
+$time = date("h:i:sa");
 
+if (isset($_POST['Set-Password'])) {
+  $NewPassword1 = mysqli_real_escape_string($connMysqli, $_POST['new_password1']);
+  $NewPassword2 = mysqli_real_escape_string($connMysqli, $_POST['new_password2']);
+  $Admin_ID = $_SESSION['Admin_Id'];
+
+  if ($NewPassword1 !== $NewPassword2) {
+    $message[] = 'Incorrect Username or Password!';
+  }
+
+  $stmt = $connMysqli->prepare("SELECT admin_password FROM admin_accounts WHERE admin_id = ?");
+  if ($stmt) {
+        $stmt->bind_param("i", $Admin_ID);
+        $stmt->execute();
+        $stmt->bind_result($CurrentPasswordHash);
+        if ($stmt->fetch()) {
+            if (password_verify($NewPassword1, $CurrentPasswordHash)) {
+                $message[] = 'New password cannot be the same as the old password.';
+            }
+        }
+        $stmt->close();
+    }
+
+    $EncryptedPassword = password_hash($NewPassword1, PASSWORD_DEFAULT);
+    $ChangeStatus = 'Old';
+
+    $stmt = $connMysqli->prepare("UPDATE admin_accounts SET admin_password = ?, admin_account_status = ? WHERE admin_id = ?");
+    if ($stmt) {
+        $stmt->bind_param("ssi", $EncryptedPassword, $ChangeStatus, $Admin_ID);
+        if ($stmt->execute()) {
+            $message[] = 'Password updated successfully!';
+        } else {
+            $message[] = 'Error updating password.';
+        }
+        $stmt->close();
+    } else {
+        $message[] = 'Error.';
+    }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,29 +74,31 @@
         <img src="../Assets/Images/EACMed Logo.png" alt="">
       </div>
         
-      <?php 
+    <form action="" class="FormLogin" method="POST" autocomplete="off">
+      <div class="Admin-LoginPageForm">
+        <h1>Welcome!</h1>
+        <p>To setup your account, you need create your own password.</p>
 
-        if(isset($_SESSION['Password_Setup'])) {
-            $Admin_id = $_SESSION['Admin_Id'];
+        <div class="SearchDoctor InputText1 RemoveIcon">
+          <!-- <i class="fa-solid fa-user-lock"></i> -->
+          <input type="password" class="NewPassword" name="new_password1" placeholder="Enter your new password">
+          <div class=""></div>
+        </div>
+        <div class="Checkbox-Div">
+          <input type="checkbox" id="ShowPass" class="checkNewShowPassword">
+          <label for="ShowPass">Show Password</label>
+        </div>
+        <br>
+        <div class="SearchDoctor InputText1 RemoveIcon">
+          <!-- <i class="fa-solid fa-key"></i> -->
+          <input type="password" class="test-input" name="new_password2" id="InputPass" placeholder="Re-enter your new password">
+        </div>
+        <br>
+        <button type="submit" class="Btn_3" name="Set-Password">Set</button>
 
-             $PasswordSetupQuery = "SELECT * FROM admin_accounts WHERE `admin_id`= '$Admin_id' ";
-             $PasswordSetupQuery = mysqli_query($connMysqli, $PasswordSetupQuery);
-             while ($row = mysqli_fetch_assoc($PasswordSetupQuery)) {
-                $Admin_Password = $row['admin_password'];
-                $Admin_Username = $row['admin_username'];
-                $Admin_Status = $row['admin_account_status'];
-                
-                echo 
-                "
-                    $Admin_Username $Admin_Status 
-                
-                "; 
-             }
-        }
-      
-      ?>
-
-    </div>
+        <?php if(isset($message)){foreach($message as $message){echo '<div class="PopUpMessage"><p> <i class="fa-solid fa-triangle-exclamation"></i> ' .$message.'</p></div>';}}?>
+      </div>
+    </form>
   </div>
   
   <script type="text/javascript" src="../Assets/JS_Login.js?ver=<?php echo time();?>"></script>
