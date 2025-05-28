@@ -70,7 +70,7 @@ body{
 
 .Admin-LoginPageForm{
   z-index: 1;
-  height: 370px;
+  height: auto;
   width: 500px;
   border-radius: 10px;
   border: 1px solid var(--BorderColor1);
@@ -84,6 +84,29 @@ body{
   transition: 0.4s;
   /* animation-name: Admin-LoginPageForm;
   animation-duration: 1s; */
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.Admin-SetupPasswordPageForm{
+  z-index: 1;
+  height: auto;
+  width: 500px;
+  border-radius: 10px;
+  border: 1px solid var(--BorderColor1);
+  background-color: var(--BGColor4);
+  border: var(--BorderColor1);
+  box-shadow: -2px 5px 25px #000000df;
+  padding: 40px;
+  border: 1px solid #ffffff00;
+  color: var(--Color1);
+  transition: 0.4s;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px; 
 }
 
 @keyframes Admin-LoginPageForm {
@@ -105,6 +128,69 @@ body{
   background-color: var(--Color3);
   color: white  ;
 }
+
+.Admin-LoginPageForm:hover{
+  /* box-shadow: -2px 5px 25px #000000df; */
+  border: 1px solid #ffffff9a;
+  box-shadow: -2px 5px 25px #00000053;
+}
+
+.Admin-LoginPageForm button{
+  width: 100%;
+  background-color: var(--Color1);
+  color: black;
+}
+.Admin-LoginPageForm button:hover{
+  background-color: var(--Color3);
+  color: white  ;
+}
+
+
+
+
+
+
+
+/* */
+.Admin-SetupPasswordPageForm:hover{
+  /* box-shadow: -2px 5px 25px #000000df; */
+  border: 1px solid #ffffff9a;
+  box-shadow: -2px 5px 25px #00000053;
+}
+
+.Admin-SetupPasswordPageForm button{
+  width: 100%;
+  background-color: var(--Color1);
+  color: black;
+}
+.Admin-SetupPasswordPageForm button:hover{
+  background-color: var(--Color3);
+  color: white  ;
+}
+
+.Admin-SetupPasswordPageForm:hover{
+  /* box-shadow: -2px 5px 25px #000000df; */
+  border: 1px solid #ffffff9a;
+  box-shadow: -2px 5px 25px #00000053;
+}
+
+.Admin-SetupPasswordPageForm button{
+  width: 100%;
+  background-color: var(--Color1);
+  color: black;
+}
+.Admin-SetupPasswordPageForm button:hover{
+  background-color: var(--Color3);
+  color: white  ;
+}
+
+
+
+
+
+
+
+
 
 
 .Checkbox-Div{

@@ -7,50 +7,51 @@
   $date2 = date("Y-M-d");
   $time = date("h:i:sa");
 
-  // Register Account 
-  if(isset($_POST['Register-Admin'])){
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $password_hash = password_hash($password, PASSWORD_BCRYPT);
-    $insertAdmin = $connPDO->prepare("INSERT INTO `admin`(admin_username,admin_password) VALUES(?,?)");
-    $insertAdmin->execute([$username, $password_hash]);
-  }
+  if (isset($_POST['Login-Admin'])) {
+    $login_email_address = mysqli_real_escape_string($connMysqli, $_POST['username']);
+    $login_password = mysqli_real_escape_string($connMysqli, $_POST['password']);
 
-  // Login Account 
-  if(isset($_POST['Login-Admin'])){
-    $login_email_address = mysqli_real_escape_string($connMysqli, $_POST['username']); // Sanitize input
-    $login_password = mysqli_real_escape_string($connMysqli, $_POST['password']); // Sanitize input
-    $stmt = $connMysqli->prepare("SELECT admin_id , admin_username, admin_password, admin_account_status FROM admin_accounts WHERE admin_username = ? LIMIT 1");
-    
+    $stmt = $connMysqli->prepare("SELECT admin_id, admin_username, admin_password, admin_account_status, admin_status FROM admin_accounts WHERE admin_username = ? LIMIT 1");
+
     if ($stmt) {
-      $stmt->bind_param("s", $login_email_address);
+        $stmt->bind_param("s", $login_email_address);
         if ($stmt->execute()) {
-            $stmt->bind_result($db_access_id, $db_email_address, $db_password_hash, $db_account_status);
+            $stmt->bind_result($db_access_id, $db_email_address, $db_password_hash, $db_account_status, $db_admin_status);
             if ($stmt->fetch()) {
                 if (password_verify($login_password, $db_password_hash)) {
-                    $_SESSION['Admin_Id'] = $db_access_id;
-                    $_SESSION['message'] = 'Welcome ' . $db_email_address;
-                    if ($db_account_status == 'New') {
-                        header("Location: ../Admin Password Setup");
-                        exit();
-                    } else {
-                        header("Location: ../Admin - Panel");
+                    if ($db_admin_status === 'Inactive') {
+                        $_SESSION['error_message'] = 'Your account is inactive.';
+                        header("Location: " . $_SERVER['PHP_SELF']);
                         exit();
                     }
+
+                    $_SESSION['Admin_Id'] = $db_access_id;
+                    $_SESSION['message'] = 'Welcome ' . $db_email_address;
+
+                    if ($db_account_status === 'New' && $db_admin_status == 'Active') {
+                        header("Location: ../Admin Password Setup");
+                    } else {
+                        $_SESSION['error_message'] = 'Error. Please try again.';
+                    }
+                    exit();
                 } else {
-                    $message[] = 'Incorrect Username or Password! 2';
+                    $_SESSION['error_message'] = 'Incorrect Username or Password!';
                 }
             } else {
-                $message[] = 'Incorrect Username or Password! 3';
+                $_SESSION['error_message'] = 'Incorrect Username or Password!';
             }
         } else {
-            $message[] = 'Incorrect Username or Password! 4';
+            $_SESSION['error_message'] = 'Login query failed.';
         }
-    $stmt->close();
+        $stmt->close();
     } else {
-        $message[] = 'Incorrect Username or Password! 5';
+        $_SESSION['error_message'] = 'Database error.';
     }
-  }
+
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +80,7 @@
         <img src="../Assets/Images/EACMed Logo.png" alt="">
       </div>
 
-      <form action="" class="FormLogin" method="POST" autocomplete="off">
+      <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" autocomplete="off">
         <div class="Admin-LoginPageForm">
           <h1>Admin Panel</h1>
           <p>Login to access your admin account.</p>
@@ -100,7 +101,13 @@
           <br>
           <button type="submit" class="Btn_3" name="Login-Admin">Login</button>
 
-          <?php if(isset($message)){foreach($message as $message){echo '<div class="PopUpMessage"><p> <i class="fa-solid fa-triangle-exclamation"></i> ' .$message.'</p></div>';}}?>
+          <?php
+              if (isset($_SESSION['error_message'])) {
+                echo '<div class="PopUpMessage"><p><i class="fa-solid fa-triangle-exclamation"></i> ' . $_SESSION['error_message'] . '</p></div>';
+                unset($_SESSION['error_message']); 
+              }
+          ?>
+
         </div>
       </form>
 

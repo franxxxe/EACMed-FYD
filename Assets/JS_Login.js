@@ -1,4 +1,9 @@
 $(document).ready(function(){
+  
+  if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+  }
+
   const myTimeout = setTimeout(timer2, 4000);
   function timer2() {
     // $('.PopUpMessage').css("display","none");
