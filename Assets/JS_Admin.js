@@ -548,13 +548,15 @@ function Yes_ResetPasswordAdmin(Yes_ResetPasswordAdmin_ID) {
   PopMessages();
   var data = {
     Yes_ResetPasswordAdmin_ID: Yes_ResetPasswordAdmin_ID,
+    UserID: UserID,
   };
   $.ajax({
     url: "../Components/Function_Admin.php",
     type: "post",
     data: data,
     success: function (response) {
-      // console.log(response);
+      console.log(response);
+       $("#Pop-Message").html("The password for the user has been successfully reset.");
     },
   });
 }

@@ -7,12 +7,6 @@ $date = date("Y-m-d");
 $date2 = date("Y-M-d");
 $time = date("h:i:sa");
 
-header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-
 if (!isset($_SESSION['Admin_Id'])) {
     header("Location: ../Admin Panel Login");
     exit();
@@ -40,8 +34,7 @@ if (isset($_POST['Set-Password'])) {
             $stmt = $connMysqli->prepare("UPDATE admin_accounts SET admin_password = ?, admin_account_status = 'Old' WHERE admin_id = ?");
             $stmt->bind_param("si", $EncryptedPassword, $Admin_ID);
             if ($stmt->execute()) {
-                $_SESSION['success_message'] = 'Password updated successfully! Redirecting back to Login.';
-                header("Location: " . $_SERVER['PHP_SELF']);
+                header("Location: Admin Password Setup/SuccessMessage.php");
                 exit();
             } else {
                 $_SESSION['error_message'] = 'Error updating password.';
@@ -50,7 +43,7 @@ if (isset($_POST['Set-Password'])) {
         }
     }
 
-    header("Location: " . $_SERVER['PHP_SELF']); 
+    header("Location: " . $_SERVER['REQUEST_URI']);
     exit();
 }
 ?>
@@ -110,12 +103,6 @@ if (isset($_POST['Set-Password'])) {
           if (isset($_SESSION['error_message'])) {
               echo '<div class="PopUpMessage"><p><i class="fa-solid fa-triangle-exclamation"></i> ' . $_SESSION['error_message'] . '</p></div>';
               unset($_SESSION['error_message']);
-          }
-
-          if (isset($_SESSION['success_message'])) {
-              echo '<div class="PopUpMessage Success"><p><i class="fa-solid fa-circle-check"></i> ' . $_SESSION['success_message'] . '</p></div>';
-              echo '<script>setTimeout(function(){ window.location.replace("../Admin Panel Login"); }, 3000);</script>';
-              unset($_SESSION['success_message']);
           }
         ?>
       </div>

@@ -428,6 +428,10 @@ if (isset($_POST["Yes_ResetPasswordAdmin_ID"])) {
   global $connMysqli;
   $Admin_ID = $_POST["Yes_ResetPasswordAdmin_ID"];
   $AdminDefaultPass = '$2y$10$ZkgThNp4XqRGDaXyuXVtr.5RGI0DsFW3Bop9MW1m.ZE7WVT6AnHvO';
+  $Admin_Reset_Status = 'Reset';
+
+  $UserID =  $_POST["UserID"];
+  $decrypted_user_id = decrypt_user_id($UserID);
 
   $ResetPasswordValidation = "SELECT * from admin_accounts 
   WHERE admin_id = '$Admin_ID'";
@@ -439,15 +443,21 @@ if (isset($_POST["Yes_ResetPasswordAdmin_ID"])) {
   if ($ResetPasswordValidation->num_rows > 0) {
     while ($row1 = mysqli_fetch_assoc($ResetPasswordValidation)) {
       $Admin_Password = $row1['admin_password'];
+      $Admin_Username = $row1['admin_username'];
+      $Account_Access = $row1['account_access'];
 
       if ($Admin_Password === $AdminDefaultPass) {
         echo "Cannot be changed";
       } else {
         // UPDATE RESET PASSWORD - ADMIN
-        $ResetPasswordQuery = "UPDATE admin_accounts SET
-        admin_password = '$AdminDefaultPass'
-        WHERE admin_id = '$Admin_ID'";
+        $ResetPasswordQuery = "UPDATE admin_accounts SET admin_password = '$AdminDefaultPass', admin_account_status = '$Admin_Reset_Status' WHERE admin_id = '$Admin_ID'";
         mysqli_query($connMysqli, $ResetPasswordQuery);
+
+        $EventType = "Reset Password"; 
+        $EditDetails = "The current password for the $Account_Access user, ". $Admin_Username . " has been reset.";
+
+        $InsertLogs = $connPDO->prepare("INSERT INTO `admin_activity_logs`(activity_logs_admin_id, event_type, edit_details) VALUES(?,?,?)");
+        $InsertLogs->execute([$decrypted_user_id, $EventType, $EditDetails]);
       }
     };
   } else {

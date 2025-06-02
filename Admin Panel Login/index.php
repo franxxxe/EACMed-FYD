@@ -7,52 +7,46 @@
   $date2 = date("Y-M-d");
   $time = date("h:i:sa");
 
-  if (isset($_POST['Login-Admin'])) {
-    $login_email_address = mysqli_real_escape_string($connMysqli, $_POST['username']);
-    $login_password = mysqli_real_escape_string($connMysqli, $_POST['password']);
+if(isset($_POST['Login-Admin'])){
+    $login_email_address = mysqli_real_escape_string($connMysqli, $_POST['username']); // Sanitize input
+    $login_password = mysqli_real_escape_string($connMysqli, $_POST['password']); // Sanitize input
 
-    $stmt = $connMysqli->prepare("SELECT admin_id, admin_username, admin_password, admin_account_status, admin_status FROM admin_accounts WHERE admin_username = ? LIMIT 1");
+    $stmt = $connMysqli->prepare("SELECT admin_id , admin_username, admin_password, admin_account_status FROM admin_accounts WHERE admin_username = ? LIMIT 1");
 
     if ($stmt) {
-        $stmt->bind_param("s", $login_email_address);
+      $stmt->bind_param("s", $login_email_address);
         if ($stmt->execute()) {
-            $stmt->bind_result($db_access_id, $db_email_address, $db_password_hash, $db_account_status, $db_admin_status);
+            $stmt->bind_result($db_access_id, $db_email_address, $db_password_hash, $db_account_status);
             if ($stmt->fetch()) {
                 if (password_verify($login_password, $db_password_hash)) {
-                    if ($db_admin_status === 'Inactive') {
-                        $_SESSION['error_message'] = 'Your account is inactive.';
-                        header("Location: " . $_SERVER['PHP_SELF']);
-                        exit();
-                    }
-
                     $_SESSION['Admin_Id'] = $db_access_id;
                     $_SESSION['message'] = 'Welcome ' . $db_email_address;
 
-                    if ($db_account_status === 'New' && $db_admin_status == 'Active') {
+                    if ($db_account_status == 'New' || $db_account_status == 'Reset') {
+                        $_SESSION['Password_Setup'] = true;
                         header("Location: ../Admin Password Setup");
+                        exit();
                     } else {
-                        $_SESSION['error_message'] = 'Error. Please try again.';
+                        header("Location: ../Admin - Panel");
+                        exit();
                     }
-                    exit();
                 } else {
-                    $_SESSION['error_message'] = 'Incorrect Username or Password!';
+                    $message[] = 'Incorrect Username or Password!';
                 }
             } else {
-                $_SESSION['error_message'] = 'Incorrect Username or Password!';
+                $message[] = 'Incorrect Username or Password!';
             }
         } else {
-            $_SESSION['error_message'] = 'Login query failed.';
+            $message[] = 'Incorrect Username or Password!';
         }
-        $stmt->close();
+    $stmt->close();
     } else {
-        $_SESSION['error_message'] = 'Database error.';
+        $message[] = 'Incorrect Username or Password!';
     }
-
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
-}
-
+  }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
