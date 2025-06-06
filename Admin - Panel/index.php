@@ -1536,10 +1536,17 @@
 
 
     <!-- POP UP -->
+     <!-- Success Pop Up --> 
       <section class="PopUp-Message">
         <div class="PopUp-Container">
           <h4 id="Pop-Message"></h4>
           <lord-icon src="https://cdn.lordicon.com/lomfljuq.json" trigger="loop" delay="1500" class="lord-icon" colors="primary:#9acd32" style="width:60px;height:60px"> </lord-icon>
+        </div>
+      </section>
+      <section class="PopUp-ErrorMessage">
+        <div class="PopUp-ErrorContainer">
+          <h4 id="Pop-ErrorMessage"></h4>
+          <i class="fa-solid fa-circle-exclamation errorIcon" style="color: #f20006;"></i>
         </div>
       </section>
     <!-- END -->

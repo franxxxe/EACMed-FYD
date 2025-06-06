@@ -1222,7 +1222,7 @@ tr:hover {
 
 .DoctorRemarks{
   width: 100%;
-  min-width: 280px;
+  min-width: 250px;
   height: 140px;
   min-height: 140px;
   max-height: 240px;
@@ -1296,4 +1296,40 @@ tr:hover {
   cursor: pointer;
   color: var(--Color3);
   border-right: var(--Border1);
+}
+
+
+/* Pop Up Error Message - Telle */
+.PopUp-ErrorMessage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  flex-direction: column;
+  padding: 20px 30px;
+  height: 200px;
+  min-width: 350px;
+  background-color: var(--BGColor1);
+  border-radius: 10px;
+  border: var(--Border1);
+  box-shadow: var(--BoxShadow);
+  z-index: 2000;
+  animation-name: PopUp-Message;
+  animation-duration: 1s;
+}
+
+.PopUp-ErrorContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.errorIcon {
+  padding-top: 20px;
+  font-size: 30px;
 }

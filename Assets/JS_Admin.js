@@ -69,6 +69,7 @@ function BTN_SubSpecialization(){
 
 function clearText() {
   $(".CT1").val("");
+  $(".CT2").val("");
 }
 
 
@@ -544,8 +545,20 @@ function ViewAdmin() {
   $(".Modal-ViewAdmin").siblings().css("display", "none");
 }
 
+function PopErrorMessages(PopErrorMsg) {
+  $("#Pop-ErrorMessage").html(PopErrorMsg);
+  $(".Prompt-Message").css("display", "none");
+  $(".PopUp-ErrorMessage").css("display", "flex");
+  $(".PopUp-ErrorMessage").addClass("AddPopUp-ErrorMessage");
+  $(".Modal-Sidebar").css("display", "none");
+  const myTimeout = setTimeout(timer2, 3000);
+  function timer2() {
+    $(".PopUp-ErrorMessage").css("display", "none");
+  }
+}
+
+
 function Yes_ResetPasswordAdmin(Yes_ResetPasswordAdmin_ID) {
-  PopMessages();
   var data = {
     Yes_ResetPasswordAdmin_ID: Yes_ResetPasswordAdmin_ID,
     UserID: UserID,
@@ -554,9 +567,16 @@ function Yes_ResetPasswordAdmin(Yes_ResetPasswordAdmin_ID) {
     url: "../Components/Function_Admin.php",
     type: "post",
     data: data,
+    dataType: "json",
     success: function (response) {
-      console.log(response);
-       $("#Pop-Message").html("The password for the user has been successfully reset.");
+      console.log(response)
+      if (response.status === "success") {
+        $("#Pop-Message").html(response.message);
+        PopMessages(); 
+      } else {
+        $("#Pop-ErrorMessage").html(response.message);
+        PopErrorMessages(); 
+      }
     },
   });
 }
